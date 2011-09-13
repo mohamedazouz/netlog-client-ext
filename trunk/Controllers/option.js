@@ -4,10 +4,13 @@ NetlogOptionObject=function(){
         authenticate:function(){
             if(!localStorage.authtokenObj){
                 background.netLogBG.netlogAuth.open( function(response){
-                    console.log(JSON.stringify(response))
-                })
+                    console.log(JSON.stringify(response));
+                });
+                $("#auth").html("remove");
             }else{
-                alert("you are already Authenticated !!");
+                 window.localStorage.removeItem("authtokenObj");
+                //localStorage.authtokenObj=null;
+                $("#auth").html("auth");
             }
         },
         doFunction:function(){
@@ -28,8 +31,17 @@ NetlogOptionObject=function(){
         }
     };
     $(function(){
-        //init
+        var auth="";
+        if(!localStorage.authtokenObj){
+            auth="auth";
+        }else{
+            auth="remove";
+        }
+        $("#auth").html(auth)
+        $("#auth").click(function(){
+            netLogOption.authenticate();
         })
+    })
     return netLogOption;
 }
 var netLogOption=new NetlogOptionObject();
