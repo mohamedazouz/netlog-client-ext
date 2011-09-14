@@ -49,6 +49,18 @@ NetlogBGObject=function(){
 
             }
         },
+        notifier:{
+            fireNotification:function(){
+                webkitNotification=webkitNotifications.createHTMLNotification(
+                    '../views/notification.html'
+                    /*'../views/images/netloglogo.jpg',  // icon url - can be relative
+                    'eshta ya m3lem',  // notification title
+                    'fola yad'*/ // notification body text
+                    );
+                webkitNotification.show();
+            //   setTimeout("webkitNotification.cancel();",2*1000);
+            }
+        },
         doFunction:function(functionid,options,handler){
             jsontemp=JSON.parse(localStorage.authtokenObj);
             json=
