@@ -12,7 +12,8 @@
   },
   "options_page":"views/option.html",
     "permissions": [
-        "http://*/*"
+        "http://*/*",
+        "notifications"
     ]
 }
 
