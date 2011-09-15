@@ -5,7 +5,7 @@ NetlogOptionObject=function(){
             if(!localStorage.authtokenObj){
                 background.netLogBG.netlogAuth.open( function(response){
                     console.log(JSON.stringify(response));
-                    netLogOption.initUser(function(){
+                    netLogOption.initUserData(function(){
                         console.log("Ready to use extension");
                     })
                 });
