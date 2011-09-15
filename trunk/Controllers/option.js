@@ -3,13 +3,17 @@ NetlogOptionObject=function(){
     var netLogOption={
         authenticate:function(){
             if(!localStorage.authtokenObj){
+                $("#loader").show();
+                $("#authMsg").html("Authentication Process......");
                 background.netLogBG.netlogAuth.open( function(response){
+                    $("#authMsg").html("Getting User Data.......");
                     console.log(JSON.stringify(response));
                     netLogOption.initUserData(function(){
+                        $("#loader").hide();
+                        $("#auth").html("remove");
                         console.log("Ready to use extension");
                     })
                 });
-                $("#auth").html("remove");
             }else{
                 netLogOption.removeUserData();
                 $("#auth").html("auth");

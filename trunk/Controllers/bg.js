@@ -96,4 +96,4 @@ NetlogBGObject=function(){
 }
 
 
-var netLogBG=new NetlogBGObject();
+var netLogBG=new NetlogBGObject(); 

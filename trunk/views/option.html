@@ -21,6 +21,8 @@ and open the template in the editor.
         <script type="text/javascript">
             function ajaxFileUpload()
             {
+                $("#loader").show();
+                $("#authMsg").html("Uploading........");
                 jsontemp=JSON.parse(localStorage.authtokenObj);
                 json=
                     {
@@ -36,10 +38,12 @@ and open the template in the editor.
                     dataType: 'json',
                     data:json,
                     success: function (response){
+                        $("#loader").hide();
                         console.log(response);
                     },
                     error: function (e)
                     {
+                        $("#loader").hide();
                         console.log("keko yad"+e);
                     }
                 })
@@ -67,6 +71,10 @@ and open the template in the editor.
 
             <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
         </form>
+        <div class="overlay" style="background: #000; opacity:.7;position: absolute; top: 0;left: 0;width: 100%; height: 100%;z-index: 50;display: none;" id="loader">
+            <img src="images/ajax-loader.gif" class="f" style="position: absolute;z-index: 100; top: 50%; left: 45%;" />
+            <p style="position: absolute;z-index: 100;top: 335;left: 43%;color: red;" id="authMsg"></p>
+        </div>
 
     </body>
 </html>
