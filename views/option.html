@@ -7,13 +7,45 @@ and open the template in the editor.
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="../views/js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/ajaxfileupload.js"></script>
         <script type="text/javascript" src="../Controllers/option.js"></script>
+
         <script>
             function test(){
                 netLogOption.doFunction(null,null,function(response){
                     console.log(JSON.stringify(response));
                 })
+            }
+        </script>
+        <script type="text/javascript">
+            function ajaxFileUpload()
+            {
+                jsontemp=JSON.parse(localStorage.authtokenObj);
+                json=
+                    {
+                    "key":jsontemp.token.key,
+                    "secret":jsontemp.token.secret,
+                    "function":4
+                }
+                $.ajaxFileUpload
+                ({
+                    url:background.netlogStaticData.baseURL+background.netlogStaticData.dofunctionURL,
+                    secureuri:false,
+                    fileElementId:'fileToUpload',
+                    dataType: 'json',
+                    data:json,
+                    success: function (response){
+                        console.log(response);
+                    },
+                    error: function (e)
+                    {
+                        console.log("keko yad"+e);
+                    }
+                })
+                
+                return false;
+
             }
         </script>
     </head>
@@ -28,5 +60,13 @@ and open the template in the editor.
         </select>
         <button onclick="test()">DoFunction</button>
         <button id="notifier">notify</button>
+
+        <br><br><br><br>
+        <form name="form" action="" method="POST" enctype="multipart/form-data">
+            <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
+
+            <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
+        </form>
+
     </body>
 </html>

@@ -7,12 +7,33 @@ and open the template in the editor.
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/ajaxfileupload.js"></script>
         <script type="text/javascript" src="../Controllers/popup.js"></script>
+        <script>
+            function ajaxFileUpload(){
+                $.ajaxFileUpload
+                ({
+                    url:'http://localhost/localhost_projects/UploadFile_JS/trail/upload.php',
+                    secureuri:false,
+                    fileElementId:'fileToUpload',
+                    dataType: 'json',
+                    //data:{},
+                    success: function (response)
+                    {
+                        console.log(response)
+                    },
+                    error: function (data, status, e)
+                    {
+                        alert(e);
+                    }
+                })
+            }
+        </script>
     </head>
     <body>
         <h1 id="username"></h1>
         <img id="userimg"/>
-        
+
     </body>
 </html>
 
