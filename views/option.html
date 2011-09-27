@@ -10,14 +10,6 @@ and open the template in the editor.
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/ajaxfileupload.js"></script>
         <script type="text/javascript" src="../Controllers/option.js"></script>
-
-        <script>
-            function test(){
-                netLogOption.doFunction(null,null,function(response){
-                    console.log(JSON.stringify(response));
-                })
-            }
-        </script>
         <script type="text/javascript">
             function ajaxFileUpload()
             {
@@ -62,7 +54,7 @@ and open the template in the editor.
             <option value="5">getFriendInfo</option>
             <option value="6">sendNotification</option>
         </select>
-        <button onclick="test()">DoFunction</button>
+        <button id="getfunction">DoFunction</button>
         <button id="notifier">notify</button>
 
         <br><br><br><br>
