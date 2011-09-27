@@ -67,10 +67,10 @@ NetlogBGObject=function(){
             {
                 "key":jsontemp.token.key,
                 "secret":jsontemp.token.secret,
-                "function":functionid
-            //  "friend_id":options.friend_id?options.friend_id:"",//friend info || send notification required friend id
-            // "body":options.body?options.body:"",// send notification required tile & body for notification form
-            //"title":options.title?options.title:""//
+                "function":functionid,
+                "friend_id":options.friend_id?options.friend_id:"",//friend info || send notification required friend id
+                "body":options.body?options.body:"",// send notification required tile & body for notification form
+                "title":options.title?options.title:""//
             }
             $.ajax({
                 url:netlogStaticData.baseURL+netlogStaticData.dofunctionURL,
@@ -123,10 +123,10 @@ NetlogBGObject=function(){
     };
     $(function(){
         //init
-      /*  netLogDB.getAllFriends(function(callback){
+        /*  netLogDB.getAllFriends(function(callback){
             console.log(callback);
         })*/
-    })
+        })
     return netLogBG;
 }
 
