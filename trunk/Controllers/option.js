@@ -54,9 +54,6 @@ NetlogOptionObject=function(){
                 break;
             }
         });
-        $("#notifier").click(function(){
-            background.netLogBG.notifier.fireNotification();
-        })
     })
     return netLogOption;
 }

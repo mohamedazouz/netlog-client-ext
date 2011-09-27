@@ -50,15 +50,15 @@ NetlogBGObject=function(){
             }
         },
         notifier:{
-            fireNotification:function(){
-                webkitNotification=webkitNotifications.createHTMLNotification(
-                    '../views/notification.html'
-                    /*'../views/images/netloglogo.jpg',  // icon url - can be relative
-                    'eshta ya m3lem',  // notification title
-                    'fola yad'*/ // notification body text
+            fireNotification:function(icon,title,body){
+                webkitNotification=webkitNotifications.createNotification(//createHTMLNotification(
+                    //'../views/notification.html'
+                    icon,  // icon url - can be relative
+                    title,  // notification title
+                    body // notification body text
                     );
                 webkitNotification.show();
-            //   setTimeout("webkitNotification.cancel();",2*1000);
+                setTimeout("webkitNotification.cancel();",3*1000);
             }
         },
         doFunction:function(functionid,options,handler){
@@ -68,9 +68,9 @@ NetlogBGObject=function(){
                 "key":jsontemp.token.key,
                 "secret":jsontemp.token.secret,
                 "function":functionid,
-                "friend_id":options.friend_id?options.friend_id:"",//friend info || send notification required friend id
-                "body":options.body?options.body:"",// send notification required tile & body for notification form
-                "title":options.title?options.title:""//
+                "friend_id":options?options.friend_id?options.friend_id:"":"",//friend info || send notification required friend id
+                "body":options?options.body?options.body:"":"",// send notification required tile & body for notification form
+                "title":options?options.title?options.title:"":""//
             }
             $.ajax({
                 url:netlogStaticData.baseURL+netlogStaticData.dofunctionURL,
@@ -88,7 +88,9 @@ NetlogBGObject=function(){
                 netLogBG.getUserFriendList(function(callback){
                     console.log(callback)
                     netLogBG.getUserNotification(function(callback){
-                        console.log(callback)
+                        console.log(callback);
+                        netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','you are Authorized to use the extension from POPup window');
+                        netLogBG.updateUserData();
                         handler(1);
                     });
                 });
@@ -97,36 +99,56 @@ NetlogBGObject=function(){
         removeUserData:function(){
             netLogDB.clearDB();
             window.localStorage.removeItem("authtokenObj");
+            window.localStorage.removeItem("friendslog");
             window.localStorage.removeItem("userInfo");
             window.localStorage.removeItem("userNotification");
         },
-        getUserInfo:function(handler){
+        getUserInfo:function(handler,update){
             netLogBG.doFunction(1,null,function(response){
                 window.localStorage.userInfo=JSON.stringify(response.result);
-                handler("Done , Setting User Info");
+                if(update){
+                    netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','User Info. Updated');
+                }else{
+                    handler("Done , Setting/update User Info");
+                }
+                
             })
         
         },
-        getUserFriendList:function(handler){
+        getUserFriendList:function(handler,update){
             netLogBG.doFunction(2,null, function(response){
                 netLogDB.insertFriends(response.result, function(response){
-                    handler(response);
+                    if(update){
+                        netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','User Friend List  Updated');
+                    }else{
+                        handler(response);
+                    }
                 });
             });
         },
-        getUserNotification:function(handler){
+        getUserNotification:function(handler,update){
             netLogBG.doFunction(3,null, function(response){
                 window.localStorage.userNotification=JSON.stringify(response.result);
-                handler("Done , User Notification");
+                if(update){
+                    netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','User Notification Updated');
+                }else{
+                    handler("Done , User Notification");
+                }
             });
+        },
+        updateUserData:function(){
+            if(localStorage.authtokenObj){
+                console.log("start Updating counter.....")
+                window.setInterval("netLogBG.getUserNotification(null,1)",2 * 1000 * 60 * 60);
+                window.setInterval("netLogBG.getUserFriendList(null,1)",2 * 1000 * 60 * 60);
+                window.setInterval("netLogBG.getUserInfo(null,1)",2 * 1000 * 60 * 60 );
+            }
         }
     };
     $(function(){
         //init
-        /*  netLogDB.getAllFriends(function(callback){
-            console.log(callback);
-        })*/
-        })
+        netLogBG.updateUserData();
+    })
     return netLogBG;
 }
 
