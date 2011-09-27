@@ -8,42 +8,7 @@ and open the template in the editor.
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/ajaxfileupload.js"></script>
         <script type="text/javascript" src="../Controllers/option.js"></script>
-        <script type="text/javascript">
-            function ajaxFileUpload()
-            {
-                $("#loader").show();
-                $("#authMsg").html("Uploading........");
-                jsontemp=JSON.parse(localStorage.authtokenObj);
-                json=
-                    {
-                    "key":jsontemp.token.key,
-                    "secret":jsontemp.token.secret,
-                    "function":4
-                }
-                $.ajaxFileUpload
-                ({
-                    url:background.netlogStaticData.baseURL+background.netlogStaticData.dofunctionURL,
-                    secureuri:false,
-                    fileElementId:'fileToUpload',
-                    dataType: 'json',
-                    data:json,
-                    success: function (response){
-                        $("#loader").hide();
-                        console.log(response);
-                    },
-                    error: function (e)
-                    {
-                        $("#loader").hide();
-                        console.log("keko yad"+e);
-                    }
-                })
-                
-                return false;
-
-            }
-        </script>
     </head>
     <body>
         <button  id="auth"></button>
@@ -55,14 +20,7 @@ and open the template in the editor.
             <option value="6">sendNotification</option>
         </select>
         <button id="getfunction">DoFunction</button>
-        <button id="notifier">notify</button>
-
         <br><br><br><br>
-        <form name="form" action="" method="POST" enctype="multipart/form-data">
-            <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
-
-            <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
-        </form>
         <div class="overlay" style="background: #000; opacity:.7;position: absolute; top: 0;left: 0;width: 100%; height: 100%;z-index: 50;display: none;" id="loader">
             <img src="images/ajax-loader.gif" class="f" style="position: absolute;z-index: 100; top: 50%; left: 45%;" />
             <p style="position: absolute;z-index: 100;top: 335;left: 43%;color: red;" id="authMsg"></p>

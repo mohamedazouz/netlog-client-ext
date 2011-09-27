@@ -10,23 +10,37 @@ and open the template in the editor.
         <script type="text/javascript" src="js/ajaxfileupload.js"></script>
         <script type="text/javascript" src="../Controllers/popup.js"></script>
         <script>
-            function ajaxFileUpload(){
+            function ajaxFileUpload()
+            {
+                $("#loader").show();
+                $("#authMsg").html("Uploading........");
+                jsontemp=JSON.parse(localStorage.authtokenObj);
+                json=
+                    {
+                    "key":jsontemp.token.key,
+                    "secret":jsontemp.token.secret,
+                    "function":4
+                }
                 $.ajaxFileUpload
                 ({
-                    url:'http://localhost/localhost_projects/UploadFile_JS/trail/upload.php',
+                    url:background.netlogStaticData.baseURL+background.netlogStaticData.dofunctionURL,
                     secureuri:false,
                     fileElementId:'fileToUpload',
                     dataType: 'json',
-                    //data:{},
-                    success: function (response)
-                    {
-                        console.log(response)
+                    data:json,
+                    success: function (response){
+                        $("#loader").hide();
+                        console.log(response);
                     },
-                    error: function (data, status, e)
+                    error: function (e)
                     {
-                        alert(e);
+                        $("#loader").hide();
+                        console.log("keko yad"+e);
                     }
                 })
+
+                return false;
+
             }
         </script>
     </head>
@@ -34,6 +48,16 @@ and open the template in the editor.
         <h1 id="username"></h1>
         <img id="userimg"/>
 
+
+        <form name="form" action="" method="POST" enctype="multipart/form-data">
+            <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
+
+            <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
+        </form>
+        <div class="overlay" style="background: #000; opacity:.7;position: absolute; top: 0;left: 0;width: 100%; height: 100%;z-index: 50;display: none;" id="loader">
+            <img src="images/ajax-loader.gif" class="f" style="position: absolute;z-index: 100; top: 50%; left: 45%;" />
+            <p style="position: absolute;z-index: 100;top: 335;left: 43%;color: red;" id="authMsg"></p>
+        </div>
     </body>
 </html>
 
