@@ -68,15 +68,9 @@ NetlogBGObject=function(){
                 "key":jsontemp.token.key,
                 "secret":jsontemp.token.secret,
                 "function":functionid
-            }
-            if(functionid==5||functionid==6)//friend info || send notification required friend id
-            {
-                json.friend_id=options.friend_id;
-            }
-            if(functionid==6)// send notification required tile & body for notification form
-            {
-                json.body=options.body;
-                json.title=options.title;
+            //  "friend_id":options.friend_id?options.friend_id:"",//friend info || send notification required friend id
+            // "body":options.body?options.body:"",// send notification required tile & body for notification form
+            //"title":options.title?options.title:""//
             }
             $.ajax({
                 url:netlogStaticData.baseURL+netlogStaticData.dofunctionURL,
@@ -87,11 +81,52 @@ NetlogBGObject=function(){
                     handler(response)
                 }
             });
+        },
+        initUserData:function(handler){
+            netLogBG.getUserInfo(function(callback){
+                console.log(callback)
+                netLogBG.getUserFriendList(function(callback){
+                    console.log(callback)
+                    netLogBG.getUserNotification(function(callback){
+                        console.log(callback)
+                        handler(1);
+                    });
+                });
+            });
+        },
+        removeUserData:function(){
+            netLogDB.clearDB();
+            window.localStorage.removeItem("authtokenObj");
+            window.localStorage.removeItem("userInfo");
+            window.localStorage.removeItem("userNotification");
+        },
+        getUserInfo:function(handler){
+            netLogBG.doFunction(1,null,function(response){
+                window.localStorage.userInfo=JSON.stringify(response.result);
+                handler("Done , Setting User Info");
+            })
+        
+        },
+        getUserFriendList:function(handler){
+            netLogBG.doFunction(2,null, function(response){
+                netLogDB.insertFriends(response.result, function(response){
+                    handler(response);
+                });
+            });
+        },
+        getUserNotification:function(handler){
+            netLogBG.doFunction(3,null, function(response){
+                window.localStorage.userNotification=JSON.stringify(response.result);
+                handler("Done , User Notification");
+            });
         }
     };
     $(function(){
         //init
-        })
+      /*  netLogDB.getAllFriends(function(callback){
+            console.log(callback);
+        })*/
+    })
     return netLogBG;
 }
 
