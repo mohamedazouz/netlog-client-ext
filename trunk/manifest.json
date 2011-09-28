@@ -3,10 +3,10 @@
     "version": "1.0",
     "description": "NetLog Extension",
     "background_page": "views/bg.html",
-    "icons":{"48": "views/images/netloglogo.jpg",
-        "128": "views/images/netloglogo.jpg"},
+    "icons":{"48": "views/images/icon.png",
+        "128": "views/images/icon.png"},
     "browser_action": {
-        "default_icon": "views/images/netloglogo.jpg",
+        "default_icon": "views/images/icon.png",
          "default_title": "NetLog Extension",
         "popup": "views/popup.html"
   },
