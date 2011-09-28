@@ -101,18 +101,15 @@ NetlogPopupObject=function(){
                 $("#addphoto").hide();
             });
         }
-        /*$("#friends-link").click(function(){
-            netLogPopup.makeItActive(this);
+        $("#friends-link").click(function(){
+            netLogPopup.showNotification();
         });
         $("#notifaction-link").click(function(){
-            netLogPopup.makeItActive(this);
+            netLogPopup.showfriends();
         });
         $("#visitors-link").click(function(){
-            netLogPopup.makeItActive(this);
+            netLogPopup.showfriends();
         });
-        $("#photo-link").click(function(){
-            netLogPopup.makeItActive(this);
-        });*/
         $("input[type=file]").change(function(){
             $(this).parents(".uploader").find(".filename").val($(this).val());
         });
