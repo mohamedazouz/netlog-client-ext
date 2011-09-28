@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Untitled Document</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/fakeFileInputs.css"/>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+$("input[type=file]").change(function(){$(this).parents(".uploader").find(".filename").val($(this).val());});
+$("input[type=file]").each(function(){
+if($(this).val()==""){$(this).parents(".uploader").find(".filename").val("No file selected...");}
+});
+});
+</script>
+</head>
+
+<body>
+<div class="main-container">
+
+		<!-- header -->
+		<header>
+        	<a href="#" class="f">
+            	<img src="images/logo.png" alt="Netlog" />
+            </a>
+            <a href="#" class="logout f-r">Log out</a>
+            <div class="clearfix"></div>
+        </header>
+        
+        <!-- tabs side bar-->
+        
+        <aside class="f">
+        	<div class="sep"></div>
+			<nav>
+            	<div href="#" class="tabs f ta-c">
+            		<a href="" class="notifaction-link"></a>
+                	<div>Notification</div>
+            	</div>
+            
+            	<div href="#" class="tabs f ta-c">
+            		<a href="" class="friends-link"></a>
+                	<div>Friends Log</div>
+            	</div>
+            
+            	<div href="#" class="tabs f ta-c">
+            		<a href="" class="visitors-link"></a>
+                	<div>Visitors</div>
+            	</div>
+            
+            	<div href="#" class="tabs f ta-c">
+            		<a href="" class="photo-link active"></a>
+                	<div>Upload Photo</div>
+            	</div>
+            </nav>
+		</aside>
+        
+        <!-- content -->
+        
+        <article class="content f-r">
+        	<h2>
+            	<img src="images/upload-header.png" alt="" />
+            	Upload Photo
+            </h2>
+            <div class="image-uploaded f">
+            	<img src="images/uploaded-image.png" width="313" height="201" />
+            </div>
+            <div class="uploaded-txt ta-c f">
+            	Phote has been added successfully
+            </div>
+            <p class="ta-c">
+            	<input type="submit" value="add another photo" />
+            </p>
+        </article>
+            
+    </div>
+</body>
+</html>
