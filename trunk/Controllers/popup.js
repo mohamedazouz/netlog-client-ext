@@ -9,6 +9,8 @@ NetlogPopupObject=function(){
         },
         authenticate:function(){
             if(!localStorage.authtokenObj){
+                window.localStorage.pendingState=1;
+                netLogPopup.pendingState();
                 background.netLogBG.netlogAuth.open( function(response){
                     console.log(JSON.stringify(response));
                     background.netLogBG.initUserData(function(){
@@ -30,7 +32,7 @@ NetlogPopupObject=function(){
             $("#content-"+lastActive.attr("class")).hide();
             $("#leftmenue").hide();
         },
-        showNotification:function(){
+        showNotification:function(start){
             var notifications=JSON.parse(window.localStorage.userNotification).friendActivities.list;
             var out="";
             var query="";
@@ -44,7 +46,7 @@ NetlogPopupObject=function(){
                 for(i=0;i<notifications.length;i++){
                     var notify=notifications[i];
                     out+='<section class="gray-round">';
-                    userName="undefiend";
+                    userName="undefiend friend";
                     userlink="";
                     for(j=0;j<response.length;j++){
                         if(notify.userId==response[j].uid){
@@ -80,18 +82,15 @@ NetlogPopupObject=function(){
         updateview:function(){
             netLogPopup.showNotification();
             netLogPopup.showfriends();
-        }
-        
-    };
-    $(function(){//init
-        $(".logout").click(function(){
-            netLogPopup.authenticate();
-        })
-        if(!window.localStorage.authtokenObj){
-            netLogPopup.readyState()
-            $(".logout").html("Log In");
-            netLogPopup.authenticate();
-        }else{
+        },
+        pendingState:function(){
+            netLogPopup.readyState();
+            $("#loader").show();
+        },
+        startState:function(){
+            $("#loader").hide();
+            $("#leftmenue").show();
+            $(".logout").html("Log Out");
             $(".tabs").click(function(){
                 netLogPopup.makeItActive($(this).children('a'));
             });
@@ -100,12 +99,38 @@ NetlogPopupObject=function(){
                 $("#uploader").show();
                 $("#addphoto").hide();
             });
+            $("#notifaction-link").addClass("active");
+            $("#content-notifaction-link").show()
+        }
+        
+    };
+    $(function(){//init
+        $(".logout").click(function(){
+            netLogPopup.authenticate();
+        })
+        if(window.localStorage.pendingState){
+            netLogPopup.pendingState();
+        }else{
+            if(!window.localStorage.authtokenObj){
+                netLogPopup.readyState()
+                $(".logout").html("Log In");
+                netLogPopup.authenticate();
+            }else{
+                $(".tabs").click(function(){
+                    netLogPopup.makeItActive($(this).children('a'));
+                });
+                netLogPopup.updateview();
+                $("#anotherimg").click(function(){
+                    $("#uploader").show();
+                    $("#addphoto").hide();
+                });
+            }
         }
         $("#friends-link").click(function(){
-            netLogPopup.showNotification();
+            netLogPopup.showfriends();
         });
         $("#notifaction-link").click(function(){
-            netLogPopup.showfriends();
+            netLogPopup.showNotification();
         });
         $("#visitors-link").click(function(){
             netLogPopup.showfriends();
