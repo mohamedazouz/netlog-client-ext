@@ -71,16 +71,29 @@ var NetLogDB=function(){
         getFriendByUID:function(uid,handler){
             var friends=[];
             netLogDB.db.transaction(function(tx) {
-                tx.executeSql("SELECT * FROM friends where uid=? ;",
+                tx.executeSql("SELECT * FROM friends where uid= ? ;",
                     [uid],
                     function(tx,results) {
                         for (i = 0; i < results.rows.length; i++) {
-                            friends.push(util.clone(results.rows.item(i)));
+                            friends.push(results.rows.item(i));
                         }
                         handler(friends);
                     });
-            },
-            netLogDB.onError);
+            },netLogDB.onError);
+        },
+        getFriendsByListUID:function(query,handler){
+            var friends=[];
+            q="SELECT * FROM friends where uid in ("+query+");";
+            netLogDB.db.transaction(function(tx) {
+                tx.executeSql(q,
+                    null,
+                    function(tx,results) {
+                        for (i = 0; i < results.rows.length; i++) {
+                            friends.push(results.rows.item(i));
+                        }
+                        handler(friends);
+                    });
+            },netLogDB.onError);
         },
         /**
          * netlog error function.
