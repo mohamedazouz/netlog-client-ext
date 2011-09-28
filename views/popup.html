@@ -23,8 +23,8 @@ and open the template in the editor.
                     "secret":jsontemp.token.secret,
                     "function":4
                 }
-                var src=document.getElementById("fileToUpload").value;
-                console.log("kakshkahs =  > " + src)
+                //var src=document.getElementById("fileToUpload").value;
+                //console.log("kakshkahs =  > " + src)
                 $.ajaxFileUpload
                 ({
                     url:background.netlogStaticData.baseURL+background.netlogStaticData.dofunctionURL,
@@ -36,7 +36,7 @@ and open the template in the editor.
                         $("#uploader").hide();
                         $("#addphoto").show();
                         $("#loader").hide();
-                        $("#imguploaded").attr('src', src)
+                     //   $("#imguploaded").attr('src', src)
                         console.log(response);
                     },
                     error: function (e)
@@ -159,9 +159,9 @@ and open the template in the editor.
                         </form>
                     </div>
                     <div  style="display:  none" id="addphoto">
-                        <div class="image-uploaded f">
+<!--                        <div class="image-uploaded f">
                             <img src="images/uploaded-image.png" width="313" height="201" id="imguploaded" />
-                        </div>
+                        </div>-->
                         <div class="uploaded-txt ta-c f">
             	Phote has been added successfully
                         </div>

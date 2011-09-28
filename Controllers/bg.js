@@ -90,6 +90,7 @@ NetlogBGObject=function(){
                     netLogBG.getUserNotification(function(callback){
                         console.log(callback);
                         netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','you are Authorized to use the extension from POPup window');
+                        netLogBG.StartState();s
                         netLogBG.updateUserData();
                         handler(1);
                     });
@@ -142,6 +143,15 @@ NetlogBGObject=function(){
                 window.setInterval("netLogBG.getUserNotification(null,1)",2 * 1000 * 60 * 60);
                 window.setInterval("netLogBG.getUserFriendList(null,1)",2 * 1000 * 60 * 60);
                 window.setInterval("netLogBG.getUserInfo(null,1)",2 * 1000 * 60 * 60 );
+            }
+        },
+        StartState:function(){
+            window.localStorage.removeItem("pendingState");
+            var x=chrome.extension.getViews({
+                type:"popup"
+            })
+            if(x.length>0){
+                x[0].netLogPopup.startState();
             }
         }
     };
