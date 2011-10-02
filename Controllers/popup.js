@@ -35,37 +35,18 @@ NetlogPopupObject=function(){
         showNotification:function(start){
             var notifications=JSON.parse(window.localStorage.userNotification).friendActivities.list;
             var out="";
-            var query="";
             for(i=0;i<notifications.length;i++){
-                query+=notifications[i].userId
-                if(i!=notifications.length-1){
-                    query+=",";
-                }
-            }   
-            background.netLogDB.getFriendsByListUID(query,function(response){
-                for(i=0;i<notifications.length;i++){
-                    var notify=notifications[i];
-                    out+='<section class="gray-round">';
-                    userName="undefiend friend";
-                    userlink="";
-                    for(j=0;j<response.length;j++){
-                        if(notify.userId==response[j].uid){
-                            userName=response[j].displayName;
-                            userlink=response[j].profileUrl;
-                            break;
-                        }
-                    }
-                    out+='<a href="'+userlink+'" target="_blanck">'+userName+'<span></span> </a>';
-                    out+="<p>"+notify.body+"</p>";
-                    var date=new Date(parseInt(notify.postedTime));
-                    now=new Date();
-                    diff=now.getTime()-date.getTime();
-                    out+='<p class="time">'+background.dateFormat(new Date(diff), "dddd, mmmm dS, HH:MM")+"</p>";
-                    out+="</section>";
-                }
-                $("#notificationfeed").html(out);
-               
-            });
+                var notify=notifications[i];
+                out+='<section class="gray-round">';
+                userName=notify.userId.displayName;
+                userlink=notify.userId.profileUrl;
+                out+='<a href="'+userlink+'" target="_blanck">'+userName+'<span></span> </a>';
+                out+="<p>"+notify.title+"</p>";
+                var date=new Date(parseInt(notify.postedTime));
+                out+='<p class="time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+"</p>";
+                out+="</section>";
+            }
+            $("#notificationfeed").html(out);
         },
         showfriends:function(){
             background.netLogDB.getAllFriends(function(response){
@@ -147,3 +128,4 @@ NetlogPopupObject=function(){
     return netLogPopup;
 }
 var netLogPopup=new NetlogPopupObject();
+
