@@ -90,7 +90,7 @@ NetlogBGObject=function(){
                     netLogBG.getUserNotification(function(callback){
                         console.log(callback);
                         netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','you are Authorized to use the extension from POPup window');
-                        netLogBG.StartState();s
+                        netLogBG.StartState();
                         netLogBG.updateUserData();
                         handler(1);
                     });
