@@ -3,7 +3,7 @@
     "version": "1.0",
     "description": "NetLog Extension",
     "background_page": "views/bg.html",
-    "icons":{"48": "views/images/icon.png",
+    "icons":{"48": "views/images/option-icon.png",
         "128": "views/images/icon.png"},
     "browser_action": {
         "default_icon": "views/images/icon.png",
