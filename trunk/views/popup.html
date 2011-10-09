@@ -14,38 +14,42 @@ and open the template in the editor.
         <script>
             function ajaxFileUpload()
             {
-                $("#loader").show();
-                $("#authMsg").html("Uploading........");
-                jsontemp=JSON.parse(localStorage.authtokenObj);
-                json=
-                    {
-                    "key":jsontemp.token.key,
-                    "secret":jsontemp.token.secret,
-                    "function":4
-                }
-                //var src=document.getElementById("fileToUpload").value;
+                var src=document.getElementById("fileToUpload").value;
                 //console.log("kakshkahs =  > " + src)
-                $.ajaxFileUpload
-                ({
-                    url:background.netlogStaticData.baseURL+background.netlogStaticData.dofunctionURL,
-                    secureuri:false,
-                    fileElementId:'fileToUpload',
-                    dataType: 'json',
-                    data:json,
-                    success: function (response){
-                        $("#uploader").hide();
-                        $("#addphoto").show();
-                        $("#loader").hide();
-                     //   $("#imguploaded").attr('src', src)
-                        console.log(response);
-                    },
-                    error: function (e)
-                    {
-                        $("#loader").hide();
-                        console.log("keko yad"+e);
+                jpg=src.substr(src.length-4,src.length);
+                if(jpg==".jpg"){
+                    $("#loader").show();
+                    $("#authMsg").html("Uploading........");
+                    jsontemp=JSON.parse(localStorage.authtokenObj);
+                    json=
+                        {
+                        "key":jsontemp.token.key,
+                        "secret":jsontemp.token.secret,
+                        "function":4
                     }
-                })
-
+                    $.ajaxFileUpload
+                    ({
+                        url:background.netlogStaticData.baseURL+background.netlogStaticData.dofunctionURL,
+                        secureuri:false,
+                        fileElementId:'fileToUpload',
+                        dataType: 'json',
+                        data:json,
+                        success: function (response){
+                            $("#uploader").hide();
+                            $("#addphoto").show();
+                            $("#loader").hide();
+                            //   $("#imguploaded").attr('src', src)
+                            console.log(response);
+                        },
+                        error: function (e)
+                        {
+                            $("#loader").hide();
+                            console.log("keko yad"+e);
+                        }
+                    })
+                }else{
+                    alert("Choose JPG Image");
+                }
                 return false;
 
             }
@@ -159,24 +163,24 @@ and open the template in the editor.
                         </form>
                     </div>
                     <div  style="display:  none" id="addphoto">
-<!--                        <div class="image-uploaded f">
-                            <img src="images/uploaded-image.png" width="313" height="201" id="imguploaded" />
-                        </div>-->
+                        <!--                        <div class="image-uploaded f">
+                                                    <img src="images/uploaded-image.png" width="313" height="201" id="imguploaded" />
+                                                </div>-->
                         <div class="uploaded-txt ta-c f">
             	Phote has been added successfully
                         </div>
                         <p class="ta-c">
-                            <button type="submit"  id="anotherimg">content-photoviewer</button>
+                            <input type="submit"  id="anotherimg" value="add another photo">
                         </p>
                     </div>
                 </div>
             </article>
         </div>
-<!--        <form name="form" action="" method="POST" enctype="multipart/form-data">
-            <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
+        <!--        <form name="form" action="" method="POST" enctype="multipart/form-data">
+                    <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
 
-            <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
-        </form>-->
+                    <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
+                </form>-->
         <div class="overlay"  id="loader">
             <img src="images/ajax-loader.gif" class="f" style="position: absolute;z-index: 100; top: 39%; left: 37%;" />
             <p style="position: absolute;z-index: 100;top: 335;left: 43%;color: red;" id="authMsg"></p>
