@@ -20,7 +20,7 @@ and open the template in the editor.
                 jpg=src.substr(src.length-4,src.length);
                 if(jpg==".jpg"){
                     $("#uploadLoader").show();
-                    $('.upload-area').hide();
+                    $('#uploader').hide();
                     jsontemp=JSON.parse(localStorage.authtokenObj);
                     json=
                         {
@@ -39,7 +39,6 @@ and open the template in the editor.
                         success: function (response){
                             $("#uploader").hide();
                             $("#addphoto").show();
-                            $("#loader").hide();
                             $("#uploadLoader").hide();
                             //   $("#imguploaded").attr('src', src)
                             window.localStorage.removeItem("uploading")
@@ -152,7 +151,7 @@ and open the template in the editor.
             <article class="content f-r" id="content-photo-link"  style="display:  none">
                 <div class="overlay"  id="uploadLoader" style="display:  none">
                     <img src="images/ajax-loader.gif" class="f" style="position: absolute;z-index: 100; top: 39%; left: 37%;"  />
-                    <p style="position: absolute;z-index: 100;top: 335;left: 17%;color: red;">Uploading........</p>
+                    <p style="position: absolute;z-index: 100;top: 335;left: 43%;color: red;">Uploading........</p>
                 </div>
 
                 <h2>
@@ -177,7 +176,7 @@ and open the template in the editor.
                                                     <img src="images/uploaded-image.png" width="313" height="201" id="imguploaded" />
                                                 </div>-->
                         <div class="uploaded-txt ta-c f">
-            	Phote has been added successfully
+            	Photo has been added successfully
                         </div>
                         <p class="ta-c">
                             <input type="submit"  id="anotherimg" value="add another photo">

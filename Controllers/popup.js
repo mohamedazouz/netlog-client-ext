@@ -203,6 +203,9 @@ NetlogPopupObject=function(){
                 $(this).parents(".uploader").find(".filename").val("No file selected...");
             }
         });
+        if(window.localStorage.uploading){
+            window.localStorage.removeItem("uploading")
+        }
     });
     return netLogPopup;
 }
