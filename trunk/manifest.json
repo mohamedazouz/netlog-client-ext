@@ -1,6 +1,6 @@
 {
     "name":"NetLog Extension",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "NetLog Extension",
     "background_page": "views/bg.html",
     "icons":{"48": "views/images/option-icon.png",
@@ -10,9 +10,8 @@
          "default_title": "NetLog Extension",
         "popup": "views/popup.html"
   },
-  "options_page":"views/option.html",
     "permissions": [
-        "http://*/*",
+        "http://*.activedd.com/*",
         "notifications"
     ]
 }
