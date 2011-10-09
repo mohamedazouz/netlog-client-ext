@@ -20,6 +20,9 @@ NetlogPopupObject=function(){
                 });
             }else{
                 netLogPopup.removeUserData();
+                chrome.browserAction.setIcon({
+                    path:'../views/images/icon.png'
+                });
             }
         },
         removeUserData:function(){

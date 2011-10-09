@@ -89,10 +89,13 @@ NetlogBGObject=function(){
                     console.log(callback)
                     netLogBG.getFriendsLog(function(callback){
                         console.log(callback);
-                        netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','you are Authorized to use the extension from POPup window');
+                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','you are Authorized to use the extension from POPup window');
                         netLogBG.StartState();
                         netLogBG.updateUserData();
                         handler(1);
+                        chrome.browserAction.setIcon({
+                            path:'../views/images/icon_.png'
+                        });
                     });
                 });
             });
@@ -108,7 +111,7 @@ NetlogBGObject=function(){
             netLogBG.doFunction(1,null,function(response){
                 window.localStorage.userInfo=JSON.stringify(response.result);
                 if(update){
-                    netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','User Info. Updated');
+                    netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Info. Updated');
                 }else{
                     handler("Done , Setting/update User Info");
                 }
@@ -120,7 +123,7 @@ NetlogBGObject=function(){
             netLogBG.doFunction(2,null, function(response){
                 netLogDB.insertFriends(response.result, function(response){
                     if(update){
-                        netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','User Friend List  Updated');
+                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Friend List  Updated');
                     }else{
                         handler(response);
                     }
@@ -131,7 +134,7 @@ NetlogBGObject=function(){
             netLogBG.doFunction(3,null, function(response){
                 window.localStorage.friendsLog=JSON.stringify(response.result);
                 if(update){
-                    netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','User Friends Log Updated');
+                    netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Friends Log Updated');
                 }else{
                     handler("Done , User Friends Log");
                 }
@@ -139,6 +142,9 @@ NetlogBGObject=function(){
         },
         updateUserData:function(){
             if(localStorage.authtokenObj){
+                chrome.browserAction.setIcon({
+                    path:'../views/images/icon_.png'
+                });
                 console.log("start Updating counter.....")
                 window.setInterval("netLogBG.getFriendsLog(null,1)",2 * 1000 * 60 * 60);
                 window.setInterval("netLogBG.getUserFriendList(null,1)",2 * 1000 * 60 * 60);
