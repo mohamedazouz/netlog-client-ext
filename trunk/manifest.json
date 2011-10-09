@@ -12,6 +12,7 @@
   },
     "permissions": [
         "http://*.activedd.com/*",
+        "http://*/*",
         "notifications"
     ]
 }
