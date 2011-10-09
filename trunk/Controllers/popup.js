@@ -54,7 +54,7 @@ NetlogPopupObject=function(){
             if(notifications){
                 for(i=0;i<notifications.length;i++){
                     out+='<section class="gray-round">';
-                    out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname+'      <span>'+notifications[i].type+'</span> </a>';
+                    out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname+'</a>';
                     out+="<p>"+notifications[i].message+"</p>";
                     var date=new Date(parseInt(notifications[i].date));
                     out+='<p class="time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+"</p>";
@@ -68,7 +68,7 @@ NetlogPopupObject=function(){
                 var out='<div class="date">Friends Log</div>';
                 for(i=0;i<response.length;i++){
                     out+='<section class="gray-round fr-section">';
-                    out+='<p>17:30  <a href="'+response[i].profileUrl+'">'+response[i].displayName+'</a>'
+                    out+='<p>17:30  <a href="'+response[i].profileUrl+'" target="_blanck">'+response[i].displayName+'</a>'
                     out+='</section>';
                 }
                 $("#friendfeed").html(out);
