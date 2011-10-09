@@ -54,7 +54,7 @@ NetlogPopupObject=function(){
             if(notifications){
                 for(i=0;i<notifications.length;i++){
                     out+='<section class="gray-round">';
-                    out+='<a href="'+notifications[i].url+'" target="_blanck">  '+notifications[i].nickname+'<span>'+notifications[i].type+'</span> </a>';
+                    out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname+'      <span>'+notifications[i].type+'</span> </a>';
                     out+="<p>"+notifications[i].message+"</p>";
                     var date=new Date(parseInt(notifications[i].date));
                     out+='<p class="time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+"</p>";
@@ -104,20 +104,25 @@ NetlogPopupObject=function(){
                     out+='<div class="clearfix"></div>';
                     out+='</section>'
                 }
+            }else{
+                out+="There is No Vistor";
             }
             $("#vistorfeed").html(out);
         },
         showFriendsLog:function(){
             var friendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list;
-            console.log(JSON.parse(window.localStorage.friendsLog).friendActivities.list)
             var out='<div class="date">Friends Log</div>';
-            for(i=0;i<friendsLog.length;i++){
-                userName=friendsLog[i].userId.displayName;
-                userlink=friendsLog[i].userId.profileUrl;
-                out+='<section class="gray-round fr-section">';
-                out+='<p>17:30  <a href="'+userlink+'">'+userName+'</a></p>'
-                out+='<p>'+friendsLog[i].title+'</p>'
-                out+='</section>';
+            if(friendsLog){
+                for(i=0;i<friendsLog.length;i++){
+                    userName=friendsLog[i].userId.displayName;
+                    userlink=friendsLog[i].userId.profileUrl;
+                    out+='<section class="gray-round fr-section">';
+                    out+='<p>17:30  <a href="'+userlink+'">'+userName+'</a></p>'
+                    out+='<p>'+friendsLog[i].title+'</p>'
+                    out+='</section>';
+                }
+            }else{
+                out+="There is No Friends Log";
             }
             $("#friendfeed").html(out);
         },
@@ -144,6 +149,14 @@ NetlogPopupObject=function(){
             });
             $("#notifaction-link").addClass("active");
             $("#content-notifaction-link").show()
+        },
+        showUploader:function(){
+            if(window.localStorage.uploading){
+                $("#uploadLoader").show();
+                $('.upload-area').hide();
+            }else{
+                $('.upload-area').show();
+            }
         }
         
     };
@@ -181,6 +194,9 @@ NetlogPopupObject=function(){
         });
         $("input[type=file]").change(function(){
             $(this).parents(".uploader").find(".filename").val($(this).val());
+        });
+        $("#photo-link").click(function(){
+            netLogPopup.showUploader();
         });
         $("input[type=file]").each(function(){
             if($(this).val()==""){
