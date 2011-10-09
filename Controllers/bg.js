@@ -87,9 +87,9 @@ NetlogBGObject=function(){
                 console.log(callback)
                 netLogBG.getUserFriendList(function(callback){
                     console.log(callback)
-                    netLogBG.getUserNotification(function(callback){
+                    netLogBG.getFriendsLog(function(callback){
                         console.log(callback);
-                        netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','you are Authorized to use the extension from POPup window');
+                        netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','you are Authorized to use the extension from POPup window');
                         netLogBG.StartState();
                         netLogBG.updateUserData();
                         handler(1);
@@ -102,13 +102,13 @@ NetlogBGObject=function(){
             window.localStorage.removeItem("authtokenObj");
             window.localStorage.removeItem("friendslog");
             window.localStorage.removeItem("userInfo");
-            window.localStorage.removeItem("userNotification");
+            window.localStorage.removeItem("friendsLog");
         },
         getUserInfo:function(handler,update){
             netLogBG.doFunction(1,null,function(response){
                 window.localStorage.userInfo=JSON.stringify(response.result);
                 if(update){
-                    netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','User Info. Updated');
+                    netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','User Info. Updated');
                 }else{
                     handler("Done , Setting/update User Info");
                 }
@@ -120,27 +120,27 @@ NetlogBGObject=function(){
             netLogBG.doFunction(2,null, function(response){
                 netLogDB.insertFriends(response.result, function(response){
                     if(update){
-                        netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','User Friend List  Updated');
+                        netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','User Friend List  Updated');
                     }else{
                         handler(response);
                     }
                 });
             });
         },
-        getUserNotification:function(handler,update){
+        getFriendsLog:function(handler,update){
             netLogBG.doFunction(3,null, function(response){
-                window.localStorage.userNotification=JSON.stringify(response.result);
+                window.localStorage.friendsLog=JSON.stringify(response.result);
                 if(update){
-                    netLogBG.notifier.fireNotification('../views/images/netloglogo.jpg','Netlog Extension','User Notification Updated');
+                    netLogBG.notifier.fireNotification('../views/images/logo.png','Netlog Extension','User Friends Log Updated');
                 }else{
-                    handler("Done , User Notification");
+                    handler("Done , User Friends Log");
                 }
             });
         },
         updateUserData:function(){
             if(localStorage.authtokenObj){
                 console.log("start Updating counter.....")
-                window.setInterval("netLogBG.getUserNotification(null,1)",2 * 1000 * 60 * 60);
+                window.setInterval("netLogBG.getFriendsLog(null,1)",2 * 1000 * 60 * 60);
                 window.setInterval("netLogBG.getUserFriendList(null,1)",2 * 1000 * 60 * 60);
                 window.setInterval("netLogBG.getUserInfo(null,1)",2 * 1000 * 60 * 60 );
             }
