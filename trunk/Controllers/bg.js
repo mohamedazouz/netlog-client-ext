@@ -163,6 +163,11 @@ NetlogBGObject=function(){
     };
     $(function(){
         //init
+        netLogBG.netlogAuth.open( function(response){
+            netLogBG.initUserData(function(){
+                console.log("Ready to use extension");
+            })
+        })
         netLogBG.updateUserData();
     })
     return netLogBG;
