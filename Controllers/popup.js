@@ -117,7 +117,7 @@ NetlogPopupObject=function(){
                     userName=friendsLog[i].userId.displayName;
                     userlink=friendsLog[i].userId.profileUrl;
                     out+='<section class="gray-round fr-section">';
-                    out+='<p>17:30  <a href="'+userlink+'">'+userName+'</a></p>'
+                    out+='<p>17:30  <a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
                     out+='<p>'+friendsLog[i].title+'</p>'
                     out+='</section>';
                 }
