@@ -180,7 +180,7 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                updateTime=1000*60//2 * 1000 * 60 * 60;
+                updateTime=2 * 1000 * 60 * 60;
                 window.setInterval("netLogBG.getFriendsLog(null,1)",updateTime);
                 window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
                 window.setInterval("netLogBG.getUserInfo(null,1)",updateTime );

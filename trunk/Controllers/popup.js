@@ -50,6 +50,8 @@ NetlogPopupObject=function(){
                 "itemid":"0"
             }]
             if(JSON.parse(window.localStorage.userInfo).code==400){
+                out+="There is No Notification";
+            }else{
                 var notifications=JSON.parse(window.localStorage.userInfo).notifications;
                 var out="";
                 if(notifications){
@@ -64,8 +66,6 @@ NetlogPopupObject=function(){
                 }else{
                     out+="There is No Notification";
                 }
-            }else{
-                out+="There is No Notification";
             }
             $("#notificationfeed").html(out);
         },
@@ -98,6 +98,8 @@ NetlogPopupObject=function(){
                 "profileUrl":"\/Bravehearrt"
             }]
             if(JSON.parse(window.localStorage.userInfo).code==400){
+                out+="There is No Vistor";
+            }else{
 
                 var vistitors=JSON.parse(window.localStorage.userInfo).profilevisitors;
                 var out='';
@@ -115,13 +117,13 @@ NetlogPopupObject=function(){
                 }else{
                     out+="There is No Vistor";
                 }
-            }else{
-                out+="There is No Vistor";
             }
             $("#vistorfeed").html(out);
         },
         showFriendsLog:function(){
             if(JSON.parse(window.localStorage.friendsLog).code==400){
+                out+="There is No Friends Log";
+            }else{
                 var friendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list;
                 var out='<div class="date">Friends Log</div>';
                 if(friendsLog){
@@ -136,8 +138,6 @@ NetlogPopupObject=function(){
                 }else{
                     out+="There is No Friends Log";
                 }
-            }else{
-                out+="There is No Friends Log";
             }
             $("#friendfeed").html(out);
         },
