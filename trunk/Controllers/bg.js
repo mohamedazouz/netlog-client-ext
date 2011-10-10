@@ -85,19 +85,22 @@ NetlogBGObject=function(){
         initUserData:function(handler){
             netLogBG.getUserInfo(function(callback){
                 console.log(callback)
-                netLogBG.getUserFriendList(function(callback){
-                    console.log(callback)
-                    netLogBG.getFriendsLog(function(callback){
-                        console.log(callback);
-                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','you are Authorized to use the extension from POPup window');
-                        netLogBG.StartState();
-                        netLogBG.updateUserData();
-                        handler(1);
-                        chrome.browserAction.setIcon({
-                            path:'../views/images/icon_.png'
-                        });
+                // netLogBG.getUserFriendList(function(callback){
+                //  console.log(callback)
+                netLogBG.getFriendsLog(function(callback){
+                    console.log(callback);
+                    netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','you are Authorized to use the extension from POPup window');
+                    netLogBG.StartState();
+                    netLogBG.updateUserData();
+                    handler(1);
+                    chrome.browserAction.setBadgeText({
+                        text:window.localStorage.badge
+                    });
+                    chrome.browserAction.setIcon({
+                        path:'../views/images/icon_.png'
                     });
                 });
+            //});
             });
         },
         removeUserData:function(){
@@ -109,13 +112,58 @@ NetlogBGObject=function(){
         },
         getUserInfo:function(handler,update){
             netLogBG.doFunction(1,null,function(response){
-                if(!response || response=="null"){
+                if(!response || response=="null" ){
                     window.localStorage.userInfo="{code:400}";
                     handler("Empty response User Info");
                 }else{
-                    window.localStorage.userInfo=JSON.stringify(response.result);
+                    vis=0;
+                    if(!window.localStorage.userInfo){
+                        window.localStorage.userInfo=JSON.stringify(response.result);
+                        if(response.result.profilevisitors){
+                            window.localStorage.notifyNumberUserVisitor=response.result.profilevisitors.length;
+                        }else{
+                            window.localStorage.notifyNumberUserVisitor="0";
+                        }
+                        window.localStorage.notifyNumberUserNotification=response.result.notifications.length;                        
+                    }else{
+                        if(response.result.profilevisitors){
+                            vis=1;
+                            var lastvistitorID=JSON.parse(window.localStorage.userInfo).profilevisitors[JSON.parse(window.localStorage.userInfo).profilevisitors.length-1].visitorid.id;
+                            var vistitors=response.result.profilevisitors
+                            var newVisitorItem=0;
+                            for(i=vistitors.length-1;i>=0;i--){
+                                if(lastvistitorID!=vistitors[i].visitorid.id){
+                                    newVisitorItem++;
+                                }else{
+                                    break;
+                                }
+                            }
+                            window.localStorage.notifyNumberUserVisitor=newVisitorItem;
+                        }
+                        var lastnotificationsID=JSON.parse(window.localStorage.userInfo).notifications[JSON.parse(window.localStorage.userInfo).notifications.length-1].nid;
+                        var notifications=response.result.notifications
+                        var newnotificationsItem=0;
+                        for(i=notifications.length-1;i>=0;i--){
+                            console.log(lastnotificationsID+"  ==   "+notifications[i].nid)
+                            if(lastnotificationsID!=notifications[i].nid){
+                                newnotificationsItem++;
+                            }else{
+                                break;
+                            }
+                        }
+                        window.localStorage.notifyNumberUserNotification=newnotificationsItem;
+                    }
+                    if(vis==1){
+                        vis=parseInt(window.localStorage.notifyNumberUserVisitor);
+                    }else{
+                        vis=0;
+                    }
+                    window.localStorage.badge="0";
+                    badge=parseInt(window.localStorage.notifyNumberUserNotification)+vis;
+                    window.localStorage.badge=badge;
                     if(update){
-                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Info. Updated');
+                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','check New vistor');
+                        handler("update");
                     }else{
                         handler("Done , Setting/update User Info");
                     }
@@ -143,31 +191,28 @@ NetlogBGObject=function(){
                 }else{
                     if(!window.localStorage.friendsLog){
                         window.localStorage.friendsLog=JSON.stringify(response.result);
-                        window.localStorage.notifyNumber=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
-                        chrome.browserAction.setBadgeText({
-                            text:window.localStorage.notifyNumber
-                        });
-                    
+                        window.localStorage.notifyNumberfriendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
+                        
                     }else{
                         var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
                         var newList=response.result.friendActivities.list;
                         var newItem=0;
-                        for(i=newList.length-1;i>=1;i++){
+                        for(i=newList.length-1;i>=0;i--){
                             if(newList[i].id!=lastnotifyID){
                                 newItem++;
                             }else{
                                 break;
                             }
-                            window.localStorage.notifyNumber=newItem;
-                            chrome.browserAction.setBadgeText({
-                                text:window.localStorage.notifyNumber
-                            });
                         }
-                    
-                    
+                        window.localStorage.friendsLog=JSON.stringify(response.result);
+                        window.localStorage.notifyNumberfriendsLog=newItem;
                     }
+                    badge=parseInt(window.localStorage.notifyNumberfriendsLog);
+                    badge+=parseInt(window.localStorage.badge);
+                    window.localStorage.badge=badge;
                     if(update){
-                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Friends Log Updated');
+                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','There is '+window.localStorage.notifyNumberfriendsLog+'items of new Friends Log ');
+                        handler("update");
                     }else{
                         handler("Done , User Friends Log");
                     }
@@ -180,11 +225,20 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                updateTime=2 * 1000 * 60 * 60;
-                window.setInterval("netLogBG.getFriendsLog(null,1)",updateTime);
-                window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
-                window.setInterval("netLogBG.getUserInfo(null,1)",updateTime );
+                updateTime= 1000 * 60//2 * 1000 * 60 * 60;
+            //window.setInterval("",updateTime);
+            //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
+            window.setInterval("netLogBG.update()",updateTime );
             }
+        },
+        update:function(){
+            netLogBG.getFriendsLog(function(){
+                netLogBG.getUserInfo(function(){
+                    chrome.browserAction.setBadgeText({
+                        text:window.localStorage.badge
+                    });
+                },1)
+            },1)
         },
         StartState:function(){
             window.localStorage.removeItem("pendingState");
