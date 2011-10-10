@@ -134,10 +134,12 @@ NetlogBGObject=function(){
             netLogBG.doFunction(3,null, function(response){
                 if(!window.localStorage.friendsLog){
                     window.localStorage.friendsLog=JSON.stringify(response.result);
-                    window.localStorage.notifyNumber=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
-                    chrome.browserAction.setBadgeText({
-                        text:window.localStorage.notifyNumber
-                    });
+                    if(JSON.parse(window.localStorage.friendsLog).friendActivities.list){
+                        window.localStorage.notifyNumber=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
+                        chrome.browserAction.setBadgeText({
+                            text:window.localStorage.notifyNumber
+                        });
+                    }
                 }else{
                     var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
                     var newList=response.result.friendActivities.list;
