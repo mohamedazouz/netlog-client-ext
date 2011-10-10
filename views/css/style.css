@@ -174,14 +174,14 @@ p.time {
 	color:#9c9c9c;
 }
 /****** friends log **/
-.h-notifaction-counter {
+.notifaction-counter {
 	background: #A80000;
 	color: white;
 	font-size: 12px;
 	padding: 2px;
 	position: absolute;
 	top: -9px;
-	left: 20px;
+	right: 20px;
 	text-shadow:0 -2px 1px #7c0000;
 	-webkit-border-radius:2px;
 }
