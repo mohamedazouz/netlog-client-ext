@@ -117,7 +117,7 @@ NetlogPopupObject=function(){
                     userName=friendsLog[i].userId.displayName;
                     userlink=friendsLog[i].userId.profileUrl;
                     out+='<section class="gray-round fr-section">';
-                    out+='<p>17:30  <a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
+                    out+='<p><a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
                     out+='<p>'+friendsLog[i].title+'</p>'
                     out+='</section>';
                 }
@@ -171,8 +171,20 @@ NetlogPopupObject=function(){
             if(!window.localStorage.authtokenObj){
                 netLogPopup.readyState()
                 $(".logout").html("Log In");
-                netLogPopup.authenticate();
+            // netLogPopup.authenticate();
             }else{
+                chrome.browserAction.setBadgeText({
+                    text:""
+                });
+                console.log(window.localStorage.notifyNumber)
+                if(window.localStorage.notifyNumber=="0")
+                {
+                    $("#notifaction-counter").removeClass("h-notifaction-counter");
+                }else{
+                    $("#notifaction-counter").html(window.localStorage.notifyNumber);
+                }
+                window.localStorage.notifyNumber=0;
+                
                 $(".tabs").click(function(){
                     netLogPopup.makeItActive($(this).children('a'));
                 });
