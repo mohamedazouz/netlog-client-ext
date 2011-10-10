@@ -37,22 +37,23 @@ NetlogOptionObject=function(){
 
         $("#getfunction").click(function(){
             console.log($("#functionid").val())
-            switch($("#functionid").val()){
-                case '1':{
-                    console.log(window.localStorage.userInfo)
-                }
-                break;
-                case '2':{
-                    background.netLogDB.getAllFriends(function(callback){
-                        console.log(JSON.stringify(callback))
-                    })
-                }
-                break;
-                case '3':{
-                    console.log(window.localStorage.userNotification)
-                }
-                break;
+      //      jsontemp=JSON.parse("{key:c3dbdee3-f4e5-c7c0-8ce8-eacef9c5fcc0, secret:3ea5faa7207a6ced5086c3dfcf8c264d}");
+            json=
+            {
+                "key":"c3dbdee3-f4e5-c7c0-8ce8-eacef9c5fcc0",
+                "secret":"3ea5faa7207a6ced5086c3dfcf8c264d",
+                "function":$("#functionid").val()
             }
+            $.ajax({
+                url:netlogStaticData.baseURL+netlogStaticData.dofunctionURL,
+                data:json,
+                type: "POST",
+                dataType:"json",
+                success: function(response){
+                    console.log(JSON.stringify(response));
+                }
+            });
+
         });
     })
     return netLogOption;
