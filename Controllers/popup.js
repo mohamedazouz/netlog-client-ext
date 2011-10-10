@@ -172,6 +172,10 @@ NetlogPopupObject=function(){
             }else{
                 $('.upload-area').show();
             }
+        },
+        removebagde:function(class_){
+            $("#"+class_).html("");
+            $("#"+class_).removeClass("notifaction-counter");
         }
         
     };
@@ -191,15 +195,26 @@ NetlogPopupObject=function(){
                 chrome.browserAction.setBadgeText({
                     text:""
                 });
-                console.log(window.localStorage.notifyNumber)
-                if(window.localStorage.notifyNumber=="0")
-                {
-                    $("#notifaction-counter").removeClass("h-notifaction-counter");
+                if(window.localStorage.notifyNumberUserNotification!="0"){
+                    $("#notify-counter").html(window.localStorage.notifyNumberUserNotification);
+                    setTimeout("netLogPopup.removebagde('notify-counter')",2*1000);
                 }else{
-                    $("#notifaction-counter").html(window.localStorage.notifyNumber);
+                    netLogPopup.removebagde('notify-counter')
                 }
-                window.localStorage.notifyNumber=0;
+                if(window.localStorage.notifyNumberUserNotification!="0"){
+                    $("#log-counter").html(window.localStorage.notifyNumberfriendsLog);
+                }else{
+                    netLogPopup.removebagde('log-counter')
+                }
                 
+                if(window.localStorage.notifyNumberUserVisitor!="0" && window.localStorage.notifyNumberUserVisitor){
+                    $("#visitor-counter").html(window.localStorage.notifyNumberUserVisitor);
+                }else{
+                    netLogPopup.removebagde('visitor-counter');
+                }
+                window.localStorage.notifyNumberUserNotification="0";
+                window.localStorage.notifyNumberfriendsLog="0";
+                window.localStorage.notifyNumberUserVisitor="0";
                 $(".tabs").click(function(){
                     netLogPopup.makeItActive($(this).children('a'));
                 });
@@ -211,12 +226,15 @@ NetlogPopupObject=function(){
             }
         }
         $("#friends-link").click(function(){
+            setTimeout("netLogPopup.removebagde('log-counter')",2*1000);
             netLogPopup.showFriendsLog();
         });
         $("#notifaction-link").click(function(){
+            setTimeout("netLogPopup.removebagde('notify-counter')",2*1000);
             netLogPopup.showNotification();
         });
         $("#visitors-link").click(function(){
+            setTimeout("netLogPopup.removebagde('visitor-counter')",2*1000);
             netLogPopup.showVisitor();
         });
         $("input[type=file]").change(function(){
