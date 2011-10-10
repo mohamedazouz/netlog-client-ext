@@ -225,7 +225,7 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                updateTime= 1000 * 60//2 * 1000 * 60 * 60;
+                updateTime=2 * 1000 * 60 * 60;
             //window.setInterval("",updateTime);
             //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
             window.setInterval("netLogBG.update()",updateTime );
