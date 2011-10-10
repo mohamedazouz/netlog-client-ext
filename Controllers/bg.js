@@ -132,7 +132,30 @@ NetlogBGObject=function(){
         },
         getFriendsLog:function(handler,update){
             netLogBG.doFunction(3,null, function(response){
-                window.localStorage.friendsLog=JSON.stringify(response.result);
+                if(!window.localStorage.friendsLog){
+                    window.localStorage.friendsLog=JSON.stringify(response.result);
+                    window.localStorage.notifyNumber=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
+                    chrome.browserAction.setBadgeText({
+                        text:window.localStorage.notifyNumber
+                    });
+                }else{
+                    var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
+                    var newList=response.result.friendActivities.list;
+                    var newItem=0;
+                    for(i=newList.length-1;i>=1;i++){
+                        if(newList[i].id!=lastnotifyID){
+                            newItem++;
+                        }else{
+                            break;
+                        }
+                        window.localStorage.notifyNumber=newItem;
+                        chrome.browserAction.setBadgeText({
+                            text:window.localStorage.notifyNumber
+                        });
+                    }
+                    
+                    
+                }
                 if(update){
                     netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Friends Log Updated');
                 }else{
@@ -163,12 +186,18 @@ NetlogBGObject=function(){
     };
     $(function(){
         //init
-        netLogBG.netlogAuth.open( function(response){
-            netLogBG.initUserData(function(){
-                console.log("Ready to use extension");
+        if(!window.localStorage.installed){
+            window.localStorage.installed=1;
+            window.localStorage.pendingState=1;
+            netLogBG.netlogAuth.open( function(response){
+                netLogBG.initUserData(function(){
+                    console.log("Ready to use extension");
+                })
             })
-        })
-        netLogBG.updateUserData();
+            netLogBG.updateUserData();
+        }else{
+            netLogBG.updateUserData();
+        }
     })
     return netLogBG;
 }
