@@ -157,6 +157,7 @@ NetlogPopupObject=function(){
             $(".tabs").click(function(){
                 netLogPopup.makeItActive($(this).children('a'));
             });
+            netLogPopup.setBadge()
             netLogPopup.updateview();
             $("#anotherimg").click(function(){
                 $("#uploader").show();
@@ -176,6 +177,31 @@ NetlogPopupObject=function(){
         removebagde:function(class_){
             $("#"+class_).html("");
             $("#"+class_).removeClass("notifaction-counter");
+        },
+        setBadge:function(){
+            chrome.browserAction.setBadgeText({
+                text:""
+            });
+            if(window.localStorage.notifyNumberUserNotification!="0"){
+                $("#notify-counter").html(window.localStorage.notifyNumberUserNotification);
+                setTimeout("netLogPopup.removebagde('notify-counter')",2*1000);
+            }else{
+                netLogPopup.removebagde('notify-counter')
+            }
+            if(window.localStorage.notifyNumberUserNotification!="0"){
+                $("#log-counter").html(window.localStorage.notifyNumberfriendsLog);
+            }else{
+                netLogPopup.removebagde('log-counter')
+            }
+
+            if(window.localStorage.notifyNumberUserVisitor!="0" && window.localStorage.notifyNumberUserVisitor){
+                $("#visitor-counter").html(window.localStorage.notifyNumberUserVisitor);
+            }else{
+                netLogPopup.removebagde('visitor-counter');
+            }
+            window.localStorage.notifyNumberUserNotification="0";
+            window.localStorage.notifyNumberfriendsLog="0";
+            window.localStorage.notifyNumberUserVisitor="0";
         }
         
     };
@@ -192,29 +218,7 @@ NetlogPopupObject=function(){
                 $(".logout").html("Log In");
             // netLogPopup.authenticate();
             }else{
-                chrome.browserAction.setBadgeText({
-                    text:""
-                });
-                if(window.localStorage.notifyNumberUserNotification!="0"){
-                    $("#notify-counter").html(window.localStorage.notifyNumberUserNotification);
-                    setTimeout("netLogPopup.removebagde('notify-counter')",2*1000);
-                }else{
-                    netLogPopup.removebagde('notify-counter')
-                }
-                if(window.localStorage.notifyNumberUserNotification!="0"){
-                    $("#log-counter").html(window.localStorage.notifyNumberfriendsLog);
-                }else{
-                    netLogPopup.removebagde('log-counter')
-                }
-                
-                if(window.localStorage.notifyNumberUserVisitor!="0" && window.localStorage.notifyNumberUserVisitor){
-                    $("#visitor-counter").html(window.localStorage.notifyNumberUserVisitor);
-                }else{
-                    netLogPopup.removebagde('visitor-counter');
-                }
-                window.localStorage.notifyNumberUserNotification="0";
-                window.localStorage.notifyNumberfriendsLog="0";
-                window.localStorage.notifyNumberUserVisitor="0";
+                netLogPopup.setBadge();
                 $(".tabs").click(function(){
                     netLogPopup.makeItActive($(this).children('a'));
                 });
