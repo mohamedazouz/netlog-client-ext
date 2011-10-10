@@ -109,11 +109,16 @@ NetlogBGObject=function(){
         },
         getUserInfo:function(handler,update){
             netLogBG.doFunction(1,null,function(response){
-                window.localStorage.userInfo=JSON.stringify(response.result);
-                if(update){
-                    netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Info. Updated');
+                if(!response || response=="null"){
+                    window.localStorage.userInfo="{code:400}";
+                    handler("Empty response User Info");
                 }else{
-                    handler("Done , Setting/update User Info");
+                    window.localStorage.userInfo=JSON.stringify(response.result);
+                    if(update){
+                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Info. Updated');
+                    }else{
+                        handler("Done , Setting/update User Info");
+                    }
                 }
                 
             })
@@ -132,36 +137,40 @@ NetlogBGObject=function(){
         },
         getFriendsLog:function(handler,update){
             netLogBG.doFunction(3,null, function(response){
-                if(!window.localStorage.friendsLog){
-                    window.localStorage.friendsLog=JSON.stringify(response.result);
-                    if(JSON.parse(window.localStorage.friendsLog).friendActivities.list){
+                if(!response || response=="null"){
+                    window.localStorage.friendsLog="{code:400}";
+                    handler("Empty response Friends Log");
+                }else{
+                    if(!window.localStorage.friendsLog){
+                        window.localStorage.friendsLog=JSON.stringify(response.result);
                         window.localStorage.notifyNumber=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
                         chrome.browserAction.setBadgeText({
                             text:window.localStorage.notifyNumber
                         });
-                    }
-                }else{
-                    var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
-                    var newList=response.result.friendActivities.list;
-                    var newItem=0;
-                    for(i=newList.length-1;i>=1;i++){
-                        if(newList[i].id!=lastnotifyID){
-                            newItem++;
-                        }else{
-                            break;
+                    
+                    }else{
+                        var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
+                        var newList=response.result.friendActivities.list;
+                        var newItem=0;
+                        for(i=newList.length-1;i>=1;i++){
+                            if(newList[i].id!=lastnotifyID){
+                                newItem++;
+                            }else{
+                                break;
+                            }
+                            window.localStorage.notifyNumber=newItem;
+                            chrome.browserAction.setBadgeText({
+                                text:window.localStorage.notifyNumber
+                            });
                         }
-                        window.localStorage.notifyNumber=newItem;
-                        chrome.browserAction.setBadgeText({
-                            text:window.localStorage.notifyNumber
-                        });
+                    
+                    
                     }
-                    
-                    
-                }
-                if(update){
-                    netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Friends Log Updated');
-                }else{
-                    handler("Done , User Friends Log");
+                    if(update){
+                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','User Friends Log Updated');
+                    }else{
+                        handler("Done , User Friends Log");
+                    }
                 }
             });
         },
@@ -171,9 +180,10 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                window.setInterval("netLogBG.getFriendsLog(null,1)",2 * 1000 * 60 * 60);
-                window.setInterval("netLogBG.getUserFriendList(null,1)",2 * 1000 * 60 * 60);
-                window.setInterval("netLogBG.getUserInfo(null,1)",2 * 1000 * 60 * 60 );
+                updateTime=1000*60//2 * 1000 * 60 * 60;
+                window.setInterval("netLogBG.getFriendsLog(null,1)",updateTime);
+                window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
+                window.setInterval("netLogBG.getUserInfo(null,1)",updateTime );
             }
         },
         StartState:function(){

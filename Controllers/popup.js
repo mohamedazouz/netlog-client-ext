@@ -49,17 +49,23 @@ NetlogPopupObject=function(){
                 "gender":"MALE",
                 "itemid":"0"
             }]
-            var notifications=JSON.parse(window.localStorage.userInfo).notifications;
-            var out="";
-            if(notifications){
-                for(i=0;i<notifications.length;i++){
-                    out+='<section class="gray-round">';
-                    out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname+'</a>';
-                    out+="<p>"+notifications[i].message+"</p>";
-                    var date=new Date(parseInt(notifications[i].date));
-                    out+='<p class="time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+"</p>";
-                    out+="</section>";
+            if(JSON.parse(window.localStorage.userInfo).code==400){
+                var notifications=JSON.parse(window.localStorage.userInfo).notifications;
+                var out="";
+                if(notifications){
+                    for(i=0;i<notifications.length;i++){
+                        out+='<section class="gray-round">';
+                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname+'</a>';
+                        out+="<p>"+notifications[i].message+"</p>";
+                        var date=new Date(parseInt(notifications[i].date));
+                        out+='<p class="time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+"</p>";
+                        out+="</section>";
+                    }
+                }else{
+                    out+="There is No Notification";
                 }
+            }else{
+                out+="There is No Notification";
             }
             $("#notificationfeed").html(out);
         },
@@ -91,18 +97,23 @@ NetlogPopupObject=function(){
                 "status":"ACTIVE",
                 "profileUrl":"\/Bravehearrt"
             }]
-            var vistitors=JSON.parse(window.localStorage.userInfo).profilevisitors;
-            var out='';
-            console.log(vistitors);
-            if(vistitors){
-                for(i=0;i<vistitors.length;i++){
-                    out+='<section class="gray-round visitors-container">';
-                    out+='<img src="'+vistitors[i].visitorid.thumbnailUrl+'" class="f"/>';
-                    out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+vistitors[i].nickname+'</a>';
-                    var date=new Date(parseInt(vistitors[i].date));
-                    out+='<span class="f-r visitor-time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</span>'
-                    out+='<div class="clearfix"></div>';
-                    out+='</section>'
+            if(JSON.parse(window.localStorage.userInfo).code==400){
+
+                var vistitors=JSON.parse(window.localStorage.userInfo).profilevisitors;
+                var out='';
+                console.log(vistitors);
+                if(vistitors){
+                    for(i=0;i<vistitors.length;i++){
+                        out+='<section class="gray-round visitors-container">';
+                        out+='<img src="'+vistitors[i].visitorid.thumbnailUrl+'" class="f"/>';
+                        out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+vistitors[i].nickname+'</a>';
+                        var date=new Date(parseInt(vistitors[i].date));
+                        out+='<span class="f-r visitor-time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</span>'
+                        out+='<div class="clearfix"></div>';
+                        out+='</section>'
+                    }
+                }else{
+                    out+="There is No Vistor";
                 }
             }else{
                 out+="There is No Vistor";
@@ -110,16 +121,20 @@ NetlogPopupObject=function(){
             $("#vistorfeed").html(out);
         },
         showFriendsLog:function(){
-            var friendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list;
-            var out='<div class="date">Friends Log</div>';
-            if(friendsLog){
-                for(i=0;i<friendsLog.length;i++){
-                    userName=friendsLog[i].userId.displayName;
-                    userlink=friendsLog[i].userId.profileUrl;
-                    out+='<section class="gray-round fr-section">';
-                    out+='<p><a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
-                    out+='<p>'+friendsLog[i].title+'</p>'
-                    out+='</section>';
+            if(JSON.parse(window.localStorage.friendsLog).code==400){
+                var friendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list;
+                var out='<div class="date">Friends Log</div>';
+                if(friendsLog){
+                    for(i=0;i<friendsLog.length;i++){
+                        userName=friendsLog[i].userId.displayName;
+                        userlink=friendsLog[i].userId.profileUrl;
+                        out+='<section class="gray-round fr-section">';
+                        out+='<p><a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
+                        out+='<p>'+friendsLog[i].title+'</p>'
+                        out+='</section>';
+                    }
+                }else{
+                    out+="There is No Friends Log";
                 }
             }else{
                 out+="There is No Friends Log";
