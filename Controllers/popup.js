@@ -188,7 +188,7 @@ NetlogPopupObject=function(){
             }else{
                 netLogPopup.removebagde('notify-counter')
             }
-            if(window.localStorage.notifyNumberUserNotification!="0"){
+            if(window.localStorage.notifyNumberfriendsLog!="0"){
                 $("#log-counter").html(window.localStorage.notifyNumberfriendsLog);
             }else{
                 netLogPopup.removebagde('log-counter')
