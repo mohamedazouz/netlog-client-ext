@@ -124,7 +124,11 @@ NetlogBGObject=function(){
                         }else{
                             window.localStorage.notifyNumberUserVisitor="0";
                         }
-                        window.localStorage.notifyNumberUserNotification=response.result.notifications.length;                        
+                        if(response.result.notifications){
+                            window.localStorage.notifyNumberUserNotification=response.result.notifications.length;
+                        }else{
+                            window.localStorage.notifyNumberUserNotification="0";
+                        }
                     }else{
                         if(response.result.profilevisitors){
                             vis=1;
@@ -226,9 +230,9 @@ NetlogBGObject=function(){
                 });
                 console.log("start Updating counter.....")
                 updateTime=2 * 1000 * 60 * 60;
-            //window.setInterval("",updateTime);
-            //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
-            window.setInterval("netLogBG.update()",updateTime );
+                //window.setInterval("",updateTime);
+                //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
+                window.setInterval("netLogBG.update()",updateTime );
             }
         },
         update:function(){
