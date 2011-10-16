@@ -38,19 +38,6 @@ NetlogPopupObject=function(){
             $("#leftmenue").hide();
         },
         showNotification:function(start){
-            [{
-                "nid":"10",
-                "uid":"169319402",
-                "type":"BIRTHDAYTOMORROW",
-                "date":1315621195,
-                "message":"It's Google Arabia's birthday in two days!",
-                "url":"http:\/\/en.netlog.com\/ChromeArabia2\/actionState=birthday&ru=65457047",
-                "visited":true,
-                "nickname":"ChromeArabia2",
-                "avatar":"http:\/\/s6.netlogstatic.com\/ar\/p\/tt\/169319402_5936028_46501213.jpg",
-                "gender":"MALE",
-                "itemid":"0"
-            }]
             if(JSON.parse(window.localStorage.userInfo).code==400){
                 out+="There is No Notification";
             }else{
@@ -86,22 +73,6 @@ NetlogPopupObject=function(){
             });
         },
         showVisitor:function(){
-            [{
-                "userid":"65457047",
-                "visitorid":"172836915",
-                "date":1315744121,
-                "nickname":"Bravehearrt",
-                "displayName":"Brave Heart",
-                "mainphotoid":"44357948",
-                "revisionid":"0",
-                "age":"29",
-                "gender":"MALE",
-                "usertypeid":"1",
-                "userType":"USER",
-                "namespace":"",
-                "status":"ACTIVE",
-                "profileUrl":"\/Bravehearrt"
-            }]
             if(JSON.parse(window.localStorage.userInfo).code==400){
                 out+="There is No Vistor";
             }else{
@@ -145,7 +116,7 @@ NetlogPopupObject=function(){
                             }
                             userlink=friendsLog[i].userId.profileUrl;
                             out+='<section class="gray-round fr-section">';
-                            out+='<p><a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
+                            //out+='<p><a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
                             out+='<p>'+friendsLog[i].title+'</p>'
                             out+='</section>';
                         }
