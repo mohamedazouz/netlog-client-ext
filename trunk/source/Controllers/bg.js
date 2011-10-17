@@ -261,7 +261,7 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                updateTime=2 * 1000 * 60// * 60;
+                updateTime=2 * 1000 * 60 * 60;
                 //window.setInterval("",updateTime);
                 //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
                 window.setInterval("netLogBG.update()",updateTime );
@@ -270,9 +270,11 @@ NetlogBGObject=function(){
         update:function(){
             netLogBG.getFriendsLog(function(){
                 netLogBG.getUserInfo(function(){
-                    chrome.browserAction.setBadgeText({
-                        text:window.localStorage.badge
-                    });
+                    if(window.localStorage.badge!="0"){
+                        chrome.browserAction.setBadgeText({
+                            text:window.localStorage.badge
+                        });
+                    }
                 },1)
             },1)
         },
