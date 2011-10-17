@@ -93,9 +93,16 @@ NetlogBGObject=function(){
                     netLogBG.StartState();
                     netLogBG.updateUserData();
                     handler(1);
-                    chrome.browserAction.setBadgeText({
-                        text:window.localStorage.badge
-                    });
+                    var x=chrome.extension.getViews({
+                        type:"popup"
+                    })
+                    if(x.length<=0){
+                        if(window.localStorage.badge!="0"){
+                            chrome.browserAction.setBadgeText({
+                                text:window.localStorage.badge
+                            });
+                        }
+                    }
                     chrome.browserAction.setIcon({
                         path:'../views/images/icon_.png'
                     });
@@ -130,7 +137,14 @@ NetlogBGObject=function(){
                             window.localStorage.notifyNumberUserNotification="0";
                         }
                     }else{
-                        if(response.result.profilevisitors){
+                        if(!JSON.parse(window.localStorage.userInfo).profilevisitors){
+                            if(response.result.profilevisitors){
+                                vis=1;
+                                window.localStorage.notifyNumberUserVisitor=response.result.profilevisitors.length;
+                            }else{
+                                window.localStorage.notifyNumberUserVisitor="0";
+                            }
+                        }else{
                             vis=1;
                             var lastvistitorID=JSON.parse(window.localStorage.userInfo).profilevisitors[JSON.parse(window.localStorage.userInfo).profilevisitors.length-1].visitorid.id;
                             var vistitors=response.result.profilevisitors
@@ -144,18 +158,26 @@ NetlogBGObject=function(){
                             }
                             window.localStorage.notifyNumberUserVisitor=newVisitorItem;
                         }
-                        var lastnotificationsID=JSON.parse(window.localStorage.userInfo).notifications[JSON.parse(window.localStorage.userInfo).notifications.length-1].nid;
-                        var notifications=response.result.notifications
-                        var newnotificationsItem=0;
-                        for(i=notifications.length-1;i>=0;i--){
-                            console.log(lastnotificationsID+"  ==   "+notifications[i].nid)
-                            if(lastnotificationsID!=notifications[i].nid){
-                                newnotificationsItem++;
+                        if(!JSON.parse(window.localStorage.userInfo).notifications){
+                            if(response.result.notifications){
+                                window.localStorage.notifyNumberUserNotification=response.result.notifications.length;
                             }else{
-                                break;
+                                window.localStorage.notifyNumberUserNotification="0";
                             }
+                        }else{
+                            var lastnotificationsID=JSON.parse(window.localStorage.userInfo).notifications[JSON.parse(window.localStorage.userInfo).notifications.length-1].nid;
+                            var notifications=response.result.notifications
+                            var newnotificationsItem=0;
+                            for(i=notifications.length-1;i>=0;i--){
+                                console.log(lastnotificationsID+"  ==   "+notifications[i].nid)
+                                if(lastnotificationsID!=notifications[i].nid){
+                                    newnotificationsItem++;
+                                }else{
+                                    break;
+                                }
+                            }
+                            window.localStorage.notifyNumberUserNotification=newnotificationsItem;
                         }
-                        window.localStorage.notifyNumberUserNotification=newnotificationsItem;
                     }
                     console.log(vis);
                     if(vis==1){
@@ -167,7 +189,9 @@ NetlogBGObject=function(){
                     badge=parseInt(window.localStorage.notifyNumberUserNotification)+vis;
                     window.localStorage.badge=badge;
                     if(update){
-                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','check New vistor');
+                        if(badge>0){
+                            netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','check New vistor');
+                        }
                         handler("update");
                     }else{
                         handler("Done , Setting/update User Info");
@@ -199,24 +223,31 @@ NetlogBGObject=function(){
                         window.localStorage.notifyNumberfriendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
                         
                     }else{
-                        var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
-                        var newList=response.result.friendActivities.list;
-                        var newItem=0;
-                        for(i=newList.length-1;i>=0;i--){
-                            if(newList[i].id!=lastnotifyID){
-                                newItem++;
-                            }else{
-                                break;
+                        if(JSON.parse(window.localStorage.friendsLog).friendActivities.list.length<=0){
+                            window.localStorage.friendsLog=JSON.stringify(response.result);
+                            window.localStorage.notifyNumberfriendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
+                        }else{
+                            var lastnotifyID=JSON.parse(window.localStorage.friendsLog).friendActivities.list[JSON.parse(window.localStorage.friendsLog).friendActivities.list.length-1].id;
+                            var newList=response.result.friendActivities.list;
+                            var newItem=0;
+                            for(i=newList.length-1;i>=0;i--){
+                                if(newList[i].id!=lastnotifyID){
+                                    newItem++;
+                                }else{
+                                    break;
+                                }
                             }
+                            window.localStorage.friendsLog=JSON.stringify(response.result);
+                            window.localStorage.notifyNumberfriendsLog=newItem;
                         }
-                        window.localStorage.friendsLog=JSON.stringify(response.result);
-                        window.localStorage.notifyNumberfriendsLog=newItem;
                     }
                     badge=parseInt(window.localStorage.notifyNumberfriendsLog);
                     badge+=parseInt(window.localStorage.badge);
                     window.localStorage.badge=badge;
                     if(update){
-                        netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','There is '+window.localStorage.notifyNumberfriendsLog+'items of new Friends Log ');
+                        if(window.localStorage.notifyNumberfriendsLog!="0"){
+                            netLogBG.notifier.fireNotification('../views/images/icon_.png','Netlog Extension','There is '+window.localStorage.notifyNumberfriendsLog+'items of new Friends Log ');
+                        }
                         handler("update");
                     }else{
                         handler("Done , User Friends Log");
@@ -230,7 +261,7 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                updateTime=2 * 1000 * 60 * 60;
+                updateTime=2 * 1000 * 60// * 60;
                 //window.setInterval("",updateTime);
                 //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
                 window.setInterval("netLogBG.update()",updateTime );
