@@ -200,25 +200,30 @@ NetlogPopupObject=function(){
         $(".logout").click(function(){
             netLogPopup.authenticate();
         })
-        if(window.localStorage.pendingState){
-            netLogPopup.pendingState();
+        if(window.localStorage.errorObj){
+            $("#loader").children("img").attr("src","logo");
+            $("#authMsg").html("You are still not logged in, Please click here( this will redirect him to the authentication page )to try again");
         }else{
-            $("#loader").hide();
-            if(!window.localStorage.authtokenObj){
-                netLogPopup.readyState()
-                $(".logout").html("Log In");
-            // netLogPopup.authenticate();
+            if(window.localStorage.pendingState){
+                netLogPopup.pendingState();
             }else{
-                netLogPopup.setBadge();
-                $(".tabs").click(function(){
-                    netLogPopup.makeItActive($(this).children('a'));
-                });
-                $(".logout").html("Log out")
-                netLogPopup.updateview();
-                $("#anotherimg").click(function(){
-                    $("#uploader").show();
-                    $("#addphoto").hide();
-                });
+                $("#loader").hide();
+                if(!window.localStorage.authtokenObj){
+                    netLogPopup.readyState()
+                    $(".logout").html("Log In");
+                // netLogPopup.authenticate();
+                }else{
+                    netLogPopup.setBadge();
+                    $(".tabs").click(function(){
+                        netLogPopup.makeItActive($(this).children('a'));
+                    });
+                    $(".logout").html("Log out")
+                    netLogPopup.updateview();
+                    $("#anotherimg").click(function(){
+                        $("#uploader").show();
+                        $("#addphoto").hide();
+                    });
+                }
             }
         }
         $("#friends-link").click(function(){
