@@ -193,6 +193,10 @@ NetlogPopupObject=function(){
             window.localStorage.notifyNumberUserNotification="0";
             window.localStorage.notifyNumberfriendsLog="0";
             window.localStorage.notifyNumberUserVisitor="0";
+        },authenticationfail:function(){
+            netLogPopup.readyState();
+            $("#loader").children("img").attr("src","../views/images/logo.png");
+            $("#authMsg").html("Faild to Authenticate, Please click Login to try again");
         }
         
     };
@@ -201,8 +205,7 @@ NetlogPopupObject=function(){
             netLogPopup.authenticate();
         })
         if(window.localStorage.errorObj){
-            $("#loader").children("img").attr("src","logo");
-            $("#authMsg").html("You are still not logged in, Please click here( this will redirect him to the authentication page )to try again");
+            netLogPopup.authenticationfail();
         }else{
             if(window.localStorage.pendingState){
                 netLogPopup.pendingState();

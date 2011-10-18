@@ -15,11 +15,17 @@ NetlogBGObject=function(){
                     count=0;
                 }
                 count=parseInt(count);
-                if(count == 3){
+                if(count == 59){
                     localStorage.errorObj=JSON.stringify({
                         error:"1",
                         msg:"Faild to Authenticate"
                     })
+                    var x=chrome.extension.getViews({
+                        type:"popup"
+                    })
+                    if(x.length>0){
+                        x[0].netLogPopup.authenticationfail();
+                    }
                     return;
                 }
                 //        url=link
