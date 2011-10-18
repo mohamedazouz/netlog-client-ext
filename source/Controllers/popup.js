@@ -49,7 +49,7 @@ NetlogPopupObject=function(){
                     }
                     for(i=0;i<notifications.length;i++){
                         out+='<section class="gray-round">';
-                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname+'</a>';
+                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname?notifications[i].nickname:notifications[i].type+'</a>';
                         out+="<p>"+notifications[i].message+"</p>";
                         var theDate = new Date(parseInt(notifications[i].date)* 1000);
                         var date=theDate.toGMTString();
@@ -88,7 +88,7 @@ NetlogPopupObject=function(){
                     for(i=0;i<vistitors.length;i++){
                         out+='<section class="gray-round visitors-container">';
                         out+='<img src="'+vistitors[i].visitorid.thumbnailUrl+'" class="f"/>';
-                        out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+vistitors[i].nickname ?vistitors[i].nickname:"Netlog"+'</a>';
+                        out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+[vistitors[i].nickname?vistitors[i].nickname:"Netlog"]+'</a>';
                         var theDate = new Date(parseInt(vistitors[i].date)* 1000);
                         var date=theDate.toGMTString();
                         out+='<span class="f-r visitor-time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</span>'
@@ -102,15 +102,16 @@ NetlogPopupObject=function(){
             $("#vistorfeed").html(out);
         },
         showFriendsLog:function(){
+            var out='';
             if(JSON.parse(window.localStorage.friendsLog).code==400){
-                out+="There is No Friends Log";
+                out="There is No Friends Log";
             }else{
                 var friendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list;
-                var out='<div class="date">Friends Log</div>';
                 if(friendsLog){
                     if(friendsLog.length==0){
                         out+="There is No Friends Log";
                     }else{
+                        out+='<div class="date">Friends Log</div>'
                         for(i=0;i<friendsLog.length;i++){
                             userName="Netlog";
                             if(friendsLog[i].userId.displayName){
@@ -138,6 +139,7 @@ NetlogPopupObject=function(){
         pendingState:function(){
             netLogPopup.readyState();
             $("#loader").show();
+            $("#authMsg").html("You are still not logged in, Please click here( this will redirect him to the authentication page )to try again");
         },
         startState:function(){
             $("#loader").hide();
@@ -211,6 +213,7 @@ NetlogPopupObject=function(){
                 $(".tabs").click(function(){
                     netLogPopup.makeItActive($(this).children('a'));
                 });
+                $(".logout").html("Log out")
                 netLogPopup.updateview();
                 $("#anotherimg").click(function(){
                     $("#uploader").show();
