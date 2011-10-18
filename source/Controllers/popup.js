@@ -91,7 +91,7 @@ NetlogPopupObject=function(){
                         out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+[vistitors[i].nickname?vistitors[i].nickname:"Netlog"]+'</a>';
                         var theDate = new Date(parseInt(vistitors[i].date)* 1000);
                         var date=theDate.toGMTString();
-                        out+='<span class="f-r visitor-time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</span>'
+                        out+='<span class="f visitor-time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</span>'
                         out+='<div class="clearfix"></div>';
                         out+='</section>'
                     }
@@ -139,7 +139,7 @@ NetlogPopupObject=function(){
         pendingState:function(){
             netLogPopup.readyState();
             $("#loader").show();
-            $("#authMsg").html("You are still not logged in, Please click here( this will redirect him to the authentication page )to try again");
+            $("#authMsg").html("You are still not logged in, Please click Login to try again");
         },
         startState:function(){
             $("#loader").hide();
