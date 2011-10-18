@@ -16,6 +16,10 @@ NetlogBGObject=function(){
                 }
                 count=parseInt(count);
                 if(count == 59){
+                    localStorage.errorObj=SON.stringify({
+                        error:"1",
+                        msg:"Faild to Authenticate"
+                    })
                     return;
                 }
                 //        url=link
@@ -30,6 +34,9 @@ NetlogBGObject=function(){
                                 }, 1000 * 2);
                             }else{
                                 localStorage.authtokenObj=JSON.stringify(res);
+                                if(window.localStorage.errorObj){
+                                    window.localStorage.removeItem("errorObj");
+                                }
                                 handler(res);
                             }
                         },
@@ -115,6 +122,9 @@ NetlogBGObject=function(){
             window.localStorage.removeItem("friendslog");
             window.localStorage.removeItem("userInfo");
             window.localStorage.removeItem("friendsLog");
+            if(window.localStorage.errorObj){
+                window.localStorage.removeItem("errorObj");
+            }
         },
         getUserInfo:function(handler,update){
             netLogBG.doFunction(1,null,function(response){
