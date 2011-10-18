@@ -15,8 +15,8 @@ NetlogBGObject=function(){
                     count=0;
                 }
                 count=parseInt(count);
-                if(count == 59){
-                    localStorage.errorObj=SON.stringify({
+                if(count == 3){
+                    localStorage.errorObj=JSON.stringify({
                         error:"1",
                         msg:"Faild to Authenticate"
                     })
