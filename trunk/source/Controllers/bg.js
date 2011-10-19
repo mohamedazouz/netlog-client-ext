@@ -2,6 +2,9 @@ NetlogBGObject=function(){
     var netLogBG={
         netlogAuth:{
             open:function(handler){
+                if(window.localStorage.errorObj){
+                    window.localStorage.removeItem("errorObj");
+                }
                 netLogBG.netlogAuth.Authenticate(0,netlogStaticData.baseURL+netlogStaticData.gettokenURL,function(data){
                     handler(data);
                 });
@@ -34,6 +37,19 @@ NetlogBGObject=function(){
                         url:link,
                         dataType:'json',
                         success:function(res){
+                            if(res.code==500){
+                                localStorage.errorObj=JSON.stringify({
+                                    error:"1",
+                                    msg:"Faild to Authenticate"
+                                })
+                                var x=chrome.extension.getViews({
+                                    type:"popup"
+                                })
+                                if(x.length>0){
+                                    x[0].netLogPopup.authenticationfail();
+                                }
+                                return;
+                            }
                             if(res.code==400){
                                 window.setTimeout(function(){
                                     netLogBG.netlogAuth.Authenticate(count+1,link,handler);
@@ -96,6 +112,13 @@ NetlogBGObject=function(){
             });
         },
         initUserData:function(handler){
+            window.localStorage.status="Authentication Success ,Extension fetching data....";
+            var x=chrome.extension.getViews({
+                type:"popup"
+            })
+            if(x.length>0){
+                x[0].netLogPopup.loaderMessage("Authentication Success ,Extension fetching data....");
+            }
             netLogBG.getUserInfo(function(callback){
                 console.log(callback)
                 // netLogBG.getUserFriendList(function(callback){
@@ -138,28 +161,13 @@ NetlogBGObject=function(){
                     window.localStorage.userInfo="{code:400}";
                     handler("Empty response User Info");
                 }else{
-                    vis=0;
                     if(!window.localStorage.userInfo){
+                        window.localStorage.notifyNumberUserVisitor=response.result.profilevisitors.length;
+                        window.localStorage.notifyNumberUserNotification=response.result.notifications.length;
                         window.localStorage.userInfo=JSON.stringify(response.result);
-                        if(response.result.profilevisitors){
-                            vis=1;
-                            window.localStorage.notifyNumberUserVisitor=response.result.profilevisitors.length;
-                        }else{
-                            window.localStorage.notifyNumberUserVisitor="0";
-                        }
-                        if(response.result.notifications){
-                            window.localStorage.notifyNumberUserNotification=response.result.notifications.length;
-                        }else{
-                            window.localStorage.notifyNumberUserNotification="0";
-                        }
                     }else{
-                        if(!JSON.parse(window.localStorage.userInfo).profilevisitors){
-                            if(response.result.profilevisitors){
-                                vis=1;
-                                window.localStorage.notifyNumberUserVisitor=response.result.profilevisitors.length;
-                            }else{
-                                window.localStorage.notifyNumberUserVisitor="0";
-                            }
+                        if(JSON.parse(window.localStorage.userInfo).profilevisitors.length==0){
+                            window.localStorage.notifyNumberUserVisitor=response.result.profilevisitors.length;
                         }else{
                             vis=1;
                             var lastvistitorID=JSON.parse(window.localStorage.userInfo).profilevisitors[JSON.parse(window.localStorage.userInfo).profilevisitors.length-1].visitorid.id;
@@ -174,12 +182,8 @@ NetlogBGObject=function(){
                             }
                             window.localStorage.notifyNumberUserVisitor=newVisitorItem;
                         }
-                        if(!JSON.parse(window.localStorage.userInfo).notifications){
-                            if(response.result.notifications){
-                                window.localStorage.notifyNumberUserNotification=response.result.notifications.length;
-                            }else{
-                                window.localStorage.notifyNumberUserNotification="0";
-                            }
+                        if(JSON.parse(window.localStorage.userInfo).notifications.length==0){
+                            window.localStorage.notifyNumberUserNotification=response.result.notifications.length;
                         }else{
                             var lastnotificationsID=JSON.parse(window.localStorage.userInfo).notifications[JSON.parse(window.localStorage.userInfo).notifications.length-1].nid;
                             var notifications=response.result.notifications
@@ -194,15 +198,10 @@ NetlogBGObject=function(){
                             }
                             window.localStorage.notifyNumberUserNotification=newnotificationsItem;
                         }
-                    }
-                    console.log(vis);
-                    if(vis==1){
-                        vis=parseInt(window.localStorage.notifyNumberUserVisitor);
-                    }else{
-                        vis=0;
+                        window.localStorage.userInfo=JSON.stringify(response.result);
                     }
                     window.localStorage.badge="0";
-                    badge=parseInt(window.localStorage.notifyNumberUserNotification)+vis;
+                    badge=parseInt(window.localStorage.notifyNumberUserNotification)+parseInt(window.localStorage.notifyNumberUserVisitor);
                     window.localStorage.badge=badge;
                     if(update){
                         if(badge>0){
@@ -236,8 +235,7 @@ NetlogBGObject=function(){
                 }else{
                     if(!window.localStorage.friendsLog){
                         window.localStorage.friendsLog=JSON.stringify(response.result);
-                        window.localStorage.notifyNumberfriendsLog=JSON.parse(window.localStorage.friendsLog).friendActivities.list.length
-                        
+                        window.localStorage.notifyNumberfriendsLog=response.result.friendActivities.list.length
                     }else{
                         if(JSON.parse(window.localStorage.friendsLog).friendActivities.list.length<=0){
                             window.localStorage.friendsLog=JSON.stringify(response.result);
@@ -253,9 +251,10 @@ NetlogBGObject=function(){
                                     break;
                                 }
                             }
-                            window.localStorage.friendsLog=JSON.stringify(response.result);
                             window.localStorage.notifyNumberfriendsLog=newItem;
+                            window.localStorage.friendsLog=JSON.stringify(response.result);
                         }
+                        
                     }
                     badge=parseInt(window.localStorage.notifyNumberfriendsLog);
                     badge+=parseInt(window.localStorage.badge);
@@ -277,15 +276,15 @@ NetlogBGObject=function(){
                     path:'../views/images/icon_.png'
                 });
                 console.log("start Updating counter.....")
-                updateTime=2 * 1000 * 60 * 60;
+                updateTime=2 * 1000 *60*60;
                 //window.setInterval("",updateTime);
                 //window.setInterval("netLogBG.getUserFriendList(null,1)",updateTime);
                 window.setInterval("netLogBG.update()",updateTime );
             }
         },
         update:function(){
-            netLogBG.getFriendsLog(function(){
-                netLogBG.getUserInfo(function(){
+            netLogBG.getUserInfo(function(){
+                netLogBG.getFriendsLog(function(){
                     if(window.localStorage.badge!="0"){
                         chrome.browserAction.setBadgeText({
                             text:window.localStorage.badge
@@ -293,6 +292,7 @@ NetlogBGObject=function(){
                     }
                 },1)
             },1)
+            
         },
         StartState:function(){
             window.localStorage.removeItem("pendingState");

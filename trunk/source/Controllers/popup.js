@@ -49,7 +49,7 @@ NetlogPopupObject=function(){
                     }
                     for(i=0;i<notifications.length;i++){
                         out+='<section class="gray-round">';
-                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+notifications[i].nickname?notifications[i].nickname:notifications[i].type+'</a>';
+                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+[notifications[i].nickname?notifications[i].nickname:notifications[i].type]+'</a>';
                         out+="<p>"+notifications[i].message+"</p>";
                         var theDate = new Date(parseInt(notifications[i].date)* 1000);
                         var date=theDate.toGMTString();
@@ -80,7 +80,6 @@ NetlogPopupObject=function(){
 
                 var vistitors=JSON.parse(window.localStorage.userInfo).profilevisitors;
                 var out='';
-                console.log(vistitors);
                 if(vistitors){
                     if(vistitors.length==0){
                         out+="There is No Vistor";
@@ -136,10 +135,14 @@ NetlogPopupObject=function(){
             netLogPopup.showFriendsLog();
             netLogPopup.showVisitor();
         },
-        pendingState:function(){
+        pendingState:function(msg){
             netLogPopup.readyState();
             $("#loader").show();
-            $("#authMsg").html("You are still not logged in, Please click Login to try again");
+            msg_="You are still not logged,follow the link";
+            if(msg && window.localStorage.authtokenObj){
+                msg_=msg;
+            }
+            $("#authMsg").html(msg_);
         },
         startState:function(){
             $("#loader").hide();
@@ -193,10 +196,14 @@ NetlogPopupObject=function(){
             window.localStorage.notifyNumberUserNotification="0";
             window.localStorage.notifyNumberfriendsLog="0";
             window.localStorage.notifyNumberUserVisitor="0";
-        },authenticationfail:function(){
+        },
+        authenticationfail:function(){
             netLogPopup.readyState();
             $("#loader").children("img").attr("src","../views/images/logo.png");
-            $("#authMsg").html("Faild to Authenticate, Please click Login to try again");
+            netLogPopup.loaderMessage("Faild to Authenticate, Please click Login to try again");
+        },
+        loaderMessage:function(msg){
+            $("#authMsg").html(msg);
         }
         
     };
@@ -208,7 +215,7 @@ NetlogPopupObject=function(){
             netLogPopup.authenticationfail();
         }else{
             if(window.localStorage.pendingState){
-                netLogPopup.pendingState();
+                netLogPopup.pendingState(window.localStorage.status);
             }else{
                 $("#loader").hide();
                 if(!window.localStorage.authtokenObj){
@@ -223,6 +230,7 @@ NetlogPopupObject=function(){
                     $(".logout").html("Log out")
                     netLogPopup.updateview();
                     $("#anotherimg").click(function(){
+                        $(".filename").val("");
                         $("#uploader").show();
                         $("#addphoto").hide();
                     });
@@ -242,7 +250,7 @@ NetlogPopupObject=function(){
             netLogPopup.showVisitor();
         });
         $("input[type=file]").change(function(){
-            $(this).parents(".uploader").find(".filename").val($(this).val());
+            $(this).parwindow.localStorage.statusents(".uploader").find(".filename").val($(this).val());
         });
         $("#photo-link").click(function(){
             netLogPopup.showUploader();
