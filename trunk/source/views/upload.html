@@ -63,32 +63,35 @@
                     $("#uploader").show();
                     $("#addphoto").hide();
                 });
+             
             });
         </script>
     </head>
 
-    <body>
-    <article class="content f-r" style="margin: 239px auto;background: #EFEFEF;border: 1px solid #CCC;">
-        <h2>
+    <body style="background:#EFEFEF;font-family:Arial, Helvetica, sans-serif;">
+    <header>
+        <a href="http://www.netlog.com" class="f" target="_blanck">
+            <img src="images/logo.png" alt="Netlog" />
+        </a>
+        <div class="clearfix"></div>
+    </header>
+    <article class="content upload">
+        <h2 style="text-align: left;">
             <img src="images/upload-header.png" alt="" />
             	Upload Photo
         </h2>
-        <div class="upload-area" >
+        <div class="upload-area-page" >
 
             <div class="uploader dark" id="uploader">
                 <form name="form" action="" method="POST" enctype="multipart/form-data">
                     <input type="text" class="filename" readonly="readonly"/>
                     <input type="button" class="button" value="Browse..."/>
                     <input id="fileToUpload" type="file" size="45" name="fileToUpload" >
-                    <div class="ta-c upload-hint">Only JPG files are allowed.</div>
+                    <div class="upload-hint" style="text-align: left;">Only JPG files are allowed.</div>
                     <p class="ta-c">
                         <button class="button" id="buttonUpload" onclick="return ajaxFileUpload();">Upload</button>
                     </p>
                 </form>
-            </div>
-            <div class="overlay"  id="uploadLoader"  style="display:  none" >
-                <img src="images/ajax-loader.gif" class="f" style="position: absolute;z-index: 100; top: 45%; "  />
-                <p style="position: absolute;z-index: 100;top: 47px;left: 80px;color: #666;font-family: arial;">Uploading........</p>
             </div>
             <div  style="display:  none" id="addphoto">
                 <div class="uploaded-txt ta-c f">
@@ -98,6 +101,12 @@
                     <input type="submit"  id="anotherimg" value="add another photo">
                 </p>
             </div>
+        </div>
+        <div class="overlay"  id="uploadLoader" style="display:  none"  >
+            <img src="images/ajax-loader.gif" class="f"   />
+            <p>Uploading........</p>
+        </div>
+        <div class="clearfix"></div>
     </article>
 
     <!--        <div class="main-container">

@@ -169,7 +169,7 @@ NetlogPopupObject=function(){
                     $('.upload-area').show();
                 }
             }else{
-                $('.upload-area').html('<a href="upload.html" target="_blanck">upload</a>');
+                $('.upload-area').html('<a href="upload.html" class="button" target="_blanck">upload</a>');
             }
         },
         removebagde:function(class_){
