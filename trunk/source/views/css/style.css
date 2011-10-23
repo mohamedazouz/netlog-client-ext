@@ -210,8 +210,7 @@ p.time {
 .visitors-container {
 	padding:4px;
 }
-.visitors-container img {
-	border:1px solid #0085fe;
+.gray-round img {
 	margin-right:5px;
 }
 .visitors-container a, .visitor-time {
@@ -280,3 +279,7 @@ p input[type='submit']{
 	height:auto;
 	margin-top:10px;
 	}
+/****************** reqiured issues */
+.visitors-date{
+    width: 60%;
+}
