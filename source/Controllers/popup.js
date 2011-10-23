@@ -85,12 +85,12 @@ NetlogPopupObject=function(){
                         out+="There is No Vistor";
                     }
                     for(i=0;i<vistitors.length;i++){
-                        out+='<section class="gray-round visitors-container">';
+                        out+='<section class="gray-round">';
                         out+='<img src="'+vistitors[i].visitorid.thumbnailUrl+'" class="f"/>';
                         out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+[vistitors[i].nickname?vistitors[i].nickname:"Netlog"]+'</a>';
                         var theDate = new Date(parseInt(vistitors[i].date)* 1000);
                         var date=theDate.toGMTString();
-                        out+='<span class="f visitor-time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</span>'
+                        out+='<p class="f time visitors-date">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</p>'
                         out+='<div class="clearfix"></div>';
                         out+='</section>'
                     }
