@@ -160,12 +160,16 @@ NetlogPopupObject=function(){
             $("#notifaction-link").addClass("active");
             $("#content-notifaction-link").show()
         },
-        showUploader:function(){
-            if(window.localStorage.uploading){
-                $("#uploadLoader").show();
-                $('.upload-area').hide();
+        showUploader:function(mac){
+            if(mac==0){
+                if(window.localStorage.uploading){
+                    $("#uploadLoader").show();
+                    $('.upload-area').hide();
+                }else{
+                    $('.upload-area').show();
+                }
             }else{
-                $('.upload-area').show();
+                $('.upload-area').html('<a href="upload.html" target="_blanck">upload</a>');
             }
         },
         removebagde:function(class_){
@@ -230,7 +234,7 @@ NetlogPopupObject=function(){
                     $(".logout").html("Log out")
                     netLogPopup.updateview();
                     $("#anotherimg").click(function(){
-                        $(".filename").val("");
+                        $(".filename").val("No file selected...");
                         $("#uploader").show();
                         $("#addphoto").hide();
                     });
@@ -250,10 +254,14 @@ NetlogPopupObject=function(){
             netLogPopup.showVisitor();
         });
         $("input[type=file]").change(function(){
-            $(this).parwindow.localStorage.statusents(".uploader").find(".filename").val($(this).val());
+            $(this).parents(".uploader").find(".filename").val($(this).val());
         });
         $("#photo-link").click(function(){
-            netLogPopup.showUploader();
+            mac=0;
+            if (navigator.appVersion.indexOf("Mac")!=-1 || navigator.appVersion.indexOf("Linux")!=-1){
+                mac=1;
+            }
+            netLogPopup.showUploader(mac);
         });
         $("input[type=file]").each(function(){
             if($(this).val()==""){
