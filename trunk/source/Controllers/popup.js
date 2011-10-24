@@ -5,7 +5,14 @@ NetlogPopupObject=function(){
             var lastActive=$(".active").removeClass("active");
             $("#content-"+lastActive.attr("class")).hide();
             $("#content-"+nextActive.attr('class')).show();
-            $(nextActive).addClass("active");   
+            if($(nextActive).attr("class")=="photo-link" &&(navigator.appVersion.indexOf("Mac")!=-1 || navigator.appVersion.indexOf("Linux")!=-1)){
+                chrome.tabs.create({
+                    url:"views/upload.html",
+                    selected:true
+                });
+            }else{
+                $(nextActive).addClass("active");
+            }
         },
         authenticate:function(){
             if(!localStorage.authtokenObj){
@@ -169,7 +176,11 @@ NetlogPopupObject=function(){
                     $('.upload-area').show();
                 }
             }else{
-                $('.upload-area').html('<a href="upload.html" class="button" target="_blanck">upload</a>');
+                chrome.tabs.create({
+                    url:"views/upload.html",
+                    selected:true
+                });
+            //$('.upload-area').html('<a href="" class="button" target="_blanck">upload</a>');
             }
         },
         removebagde:function(class_){
@@ -203,7 +214,9 @@ NetlogPopupObject=function(){
         },
         authenticationfail:function(){
             netLogPopup.readyState();
-            $("#loader").children("img").attr("src","../views/images/logo.png");
+            $("#loader").children("img").attr("style","position: absolute;z-index: 100;top: 31%;left: 25%");
+            $("#loader").children("img").attr("src","../views/images/bg.png");
+
             netLogPopup.loaderMessage("Faild to Authenticate, Please click Login to try again");
         },
         loaderMessage:function(msg){
