@@ -13,8 +13,8 @@
             {
 
                 var src=document.getElementById("fileToUpload").value;
-                jpg=src.substr(src.length-4,src.length);
-                if(jpg==".jpg"|| jpg==".JPG"){
+                jpg=src.split(".")[1];
+                if(jpg=="jpg"|| jpg=="JPG" || jpg=="jpeg"|| jpg=="JPEG"){
                     $("#uploadLoader").show();
                     $('#uploader').hide();
                     jsontemp=JSON.parse(localStorage.authtokenObj);
