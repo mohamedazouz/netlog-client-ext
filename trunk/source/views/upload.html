@@ -14,7 +14,7 @@
 
                 var src=document.getElementById("fileToUpload").value;
                 jpg=src.substr(src.length-4,src.length);
-                if(jpg==".jpg"){
+                if(jpg==".jpg"|| jpg==".JPG"){
                     $("#uploadLoader").show();
                     $('#uploader').hide();
                     jsontemp=JSON.parse(localStorage.authtokenObj);

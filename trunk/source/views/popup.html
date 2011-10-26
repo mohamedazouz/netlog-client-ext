@@ -18,7 +18,7 @@ and open the template in the editor.
                 var src=document.getElementById("fileToUpload").value;
                 //console.log("kakshkahs =  > " + src)
                 jpg=src.substr(src.length-4,src.length);
-                if(jpg==".jpg"){
+                if(jpg==".jpg" || jpg==".JPG"){
                     $("#uploadLoader").show();
                     $('#uploader').hide();
                     jsontemp=JSON.parse(localStorage.authtokenObj);
