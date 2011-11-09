@@ -4,13 +4,13 @@ NetlogPopupObject=function(){
         makeItActive:function(nextActive){
             var lastActive=$(".active").removeClass("active");
             $("#content-"+lastActive.attr("class")).hide();
-            $("#content-"+nextActive.attr('class')).show();
             if($(nextActive).attr("class")=="photo-link" &&(navigator.appVersion.indexOf("Mac")!=-1 || navigator.appVersion.indexOf("Linux")!=-1)){
                 chrome.tabs.create({
                     url:"views/upload.html",
                     selected:true
                 });
             }else{
+                $("#content-"+nextActive.attr('class')).show();
                 $(nextActive).addClass("active");
             }
         },
@@ -20,11 +20,9 @@ NetlogPopupObject=function(){
                 window.localStorage.pendingState=1;
                 netLogPopup.pendingState();
                 background.netLogBG.netlogAuth.open( function(response){
-                    console.log(JSON.stringify(response));
                     background.netLogBG.initUserData(function(){
                         $(".logout").html("Log Out");
                         $(".logout").show();
-                        console.log("Ready to use extension");
                     })
                 });
             }else{
@@ -56,8 +54,8 @@ NetlogPopupObject=function(){
                     }
                     for(i=0;i<notifications.length;i++){
                         out+='<section class="gray-round">';
-                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+[notifications[i].nickname?notifications[i].nickname:notifications[i].type]+'</a>';
-                        out+="<p>"+notifications[i].message+"</p>";
+                        out+='<b style="color:#4276A6;">'+[notifications[i].nickname?notifications[i].nickname:notifications[i].type] + '</b>';
+                        out+='<a href="'+notifications[i].url+'" target="_blanck">'+"<p>"+notifications[i].message+"</p>"+'</a>';
                         var theDate = new Date(parseInt(notifications[i].date)* 1000);
                         var date=theDate.toGMTString();
                         out+='<p class="time">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+"</p>";
@@ -93,8 +91,8 @@ NetlogPopupObject=function(){
                     }
                     for(i=0;i<vistitors.length;i++){
                         out+='<section class="gray-round">';
-                        out+='<img src="'+vistitors[i].visitorid.thumbnailUrl+'" class="f"/>';
-                        out+='<a href="'+vistitors[i].visitorid.profileUrl+'" class="f" target="_blanck">'+[vistitors[i].nickname?vistitors[i].nickname:"Netlog"]+'</a>';
+                        out+='<a href="'+vistitors[i].visitorid.profileUrl+'" target="_blanck">'+'<img src="'+vistitors[i].visitorid.thumbnailUrl+'" class="f"/>';
+                        out+=[vistitors[i].nickname?vistitors[i].nickname:"Netlog"]+'</a>';
                         var theDate = new Date(parseInt(vistitors[i].date)* 1000);
                         var date=theDate.toGMTString();
                         out+='<p class="f time visitors-date">'+background.dateFormat(date, "dddd, mmmm dS, HH:MM")+'</p>'
