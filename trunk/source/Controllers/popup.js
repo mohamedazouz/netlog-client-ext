@@ -124,7 +124,7 @@ NetlogPopupObject=function(){
                             userlink=friendsLog[i].userId.profileUrl;
                             out+='<section class="gray-round fr-section">';
                             //out+='<p><a href="'+userlink+'" target="_blanck">'+userName+'</a></p>'
-                            out+='<p>'+friendsLog[i].title+'</p>'
+                            out+='<p>'+(friendsLog[i].title?netLogPopup.strip(friendsLog[i].title):friendsLog[i].body?friendsLog[i].body:'Empty one !')+'</p>';
                             out+='</section>';
                         }
                     }
@@ -134,6 +134,11 @@ NetlogPopupObject=function(){
                 }
             }
             $("#friendfeed").html(out);
+        },
+        strip:function(html){
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent||tmp.innerText;
         },
         updateview:function(){
             netLogPopup.showNotification();
